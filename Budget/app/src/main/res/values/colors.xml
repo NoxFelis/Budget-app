@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="delftBlue">#292541</color>
+    <color name="delftBlue_2">#423C68</color>
+    <color name="platinum">#E2E2DF</color>
+    <color name="timberwolf">#D2D2CF</color>
+    <color name="champagnePink">#F7D9C4</color>
+    <color name="dutchWhite">#FAEDCB</color>
+    <color name="mintGreen">#BBDDD6</color>
+    <color name="columbiaBlue">#C6DEF1</color>
+    <color name="thistle">#DBCDF0</color>
+    <color name="fairyTale">#F2C6DE</color>
+    <color name="teaRose">#F9C6C9</color>
+    <color name="battleshipGray">#949489</color>
+    <color name="ultraViolet">#524A82</color>
+</resources>

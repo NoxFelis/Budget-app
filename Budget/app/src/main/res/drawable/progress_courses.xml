@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromDegrees="230"
+    android:toDegrees="230"
+    android:id="@+id/progress_courses">
+    <shape
+        android:innerRadius="100dp"
+        android:shape="ring"
+        android:thickness="30dp"
+        android:useLevel="true">
+        <solid android:color="@color/timberwolf"/>
+    </shape>
+</rotate>

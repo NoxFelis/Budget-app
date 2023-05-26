@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:padding="15dp"
+    android:layout_height="wrap_content"
+    android:background="@color/delftBlue_2">
+
+    <TextView
+        android:id="@+id/cellText"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:maxLines="1"
+        android:text="Autre"
+        android:textColor="@color/platinum"
+        android:textSize="20sp"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/cellAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:maxLines="1"
+        android:text="0€"
+        android:textColor="@color/platinum"
+        android:textSize="20sp"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"/>
+
+    <View
+        android:id="@+id/color"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@color/champagnePink" />
+
+</LinearLayout>
