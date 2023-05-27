@@ -1,6 +1,4 @@
-package sneiger.budget;
-
-import androidx.appcompat.app.AppCompatActivity;
+package nfelis.budget;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -21,8 +19,8 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import sneiger.budget.databinding.ActivityDetailBinding;
-import sneiger.budget.databinding.ActivityMoisBinding;
+import nfelis.budget.R;
+import nfelis.budget.databinding.ActivityMoisBinding;
 
 public class MoisActivity extends MainActivity {
 

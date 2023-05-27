@@ -1,4 +1,4 @@
-package sneiger.budget;
+package nfelis.budget;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -19,7 +19,8 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import sneiger.budget.databinding.ActivityPeriodeBinding;
+import nfelis.budget.R;
+import nfelis.budget.databinding.ActivityPeriodeBinding;
 
 public class PeriodeActivity extends MainActivity {
 

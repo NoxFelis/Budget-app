@@ -1,4 +1,4 @@
-package sneiger.budget;
+package nfelis.budget;
 
 import java.util.ArrayList;
 import java.util.HashMap;

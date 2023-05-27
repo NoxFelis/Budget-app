@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'sneiger.budget'
+    namespace 'nfelis.budget'
     compileSdk 33
 
     defaultConfig {
-        applicationId "sneiger.budget"
+        applicationId "nfelis.budget"
         minSdk 27
         targetSdk 33
         versionCode 1

@@ -1,4 +1,4 @@
-package sneiger.budget;
+package nfelis.budget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -7,13 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
 import java.util.List;
+
+import nfelis.budget.R;
 
 public class CategoryAdapter extends ArrayAdapter<Category> {
 
@@ -27,7 +27,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         super(context,0,categories);
         this.context = context;
         this.categories = categories;
-        delftBlue_2 = ContextCompat.getColor(context,R.color.delftBlue_2);
+        delftBlue_2 = ContextCompat.getColor(context, R.color.delftBlue_2);
         platinum = ContextCompat.getColor(context,R.color.platinum);
     }
 

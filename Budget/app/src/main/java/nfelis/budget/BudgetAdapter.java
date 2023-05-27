@@ -1,4 +1,4 @@
-package sneiger.budget;
+package nfelis.budget;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+
+import nfelis.budget.R;
 
 public class BudgetAdapter extends ArrayAdapter<Category> {
     private Context context;

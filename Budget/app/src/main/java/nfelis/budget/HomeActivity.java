@@ -1,11 +1,10 @@
-package sneiger.budget;
+package nfelis.budget;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -20,7 +19,8 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import sneiger.budget.databinding.ActivityHomeBinding;
+import nfelis.budget.R;
+import nfelis.budget.databinding.ActivityHomeBinding;
 
 public class HomeActivity extends MainActivity {
     private PieChart pieChart;

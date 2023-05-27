@@ -16,19 +16,19 @@
         android:theme="@style/Theme.Budget"
         tools:targetApi="31">
         <activity
-            android:name=".CategoryActivity"
+            android:name="nfelis.budget.CategoryActivity"
             android:exported="false" />
         <activity
-            android:name=".CategoryEditActivity"
+            android:name="nfelis.budget.CategoryEditActivity"
             android:exported="false" />
         <activity
-            android:name=".SettingsActivity"
+            android:name="nfelis.budget.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".ExpenseEditActivity"
+            android:name="nfelis.budget.ExpenseEditActivity"
             android:exported="false" />
         <activity
-            android:name=".HomeActivity"
+            android:name="nfelis.budget.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,13 +37,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PeriodeActivity"
+            android:name="nfelis.budget.PeriodeActivity"
             android:exported="false" />
         <activity
-            android:name=".MoisActivity"
+            android:name="nfelis.budget.MoisActivity"
             android:exported="false" />
         <activity
-            android:name=".DetailActivity"
+            android:name="nfelis.budget.DetailActivity"
             android:exported="false" />
     </application>
 

@@ -1,4 +1,4 @@
-package sneiger.budget;
+package nfelis.budget;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -20,12 +19,12 @@ import android.widget.Switch;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+
+import nfelis.budget.R;
 
 public class ExpenseEditActivity extends AppCompatActivity {
     private EditText titreEditText,editTextNumber;

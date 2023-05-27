@@ -1,4 +1,4 @@
-package sneiger.budget;
+package nfelis.budget;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -8,9 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 
-import java.io.File;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,7 +56,7 @@ public class SQLiteManager extends SQLiteOpenHelper
 
         if(sqLiteManager == null)
             if (custom) {
-                customPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + "/sneiger.budget/Expense.db";
+                customPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + "/nfelis.budget/Expense.db";
                 sqLiteManager =  new SQLiteManager(context,customPath);
             } else {
                 sqLiteManager =  new SQLiteManager(context);

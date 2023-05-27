@@ -1,4 +1,4 @@
-package sneiger.budget;
+package nfelis.budget;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -10,13 +10,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
 
 import com.google.android.material.navigation.NavigationView;
+
+import nfelis.budget.R;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 

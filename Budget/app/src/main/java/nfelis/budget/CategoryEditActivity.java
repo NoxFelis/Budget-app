@@ -1,4 +1,4 @@
-package sneiger.budget;
+package nfelis.budget;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +14,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import nfelis.budget.R;
 
 public class CategoryEditActivity extends AppCompatActivity {
 

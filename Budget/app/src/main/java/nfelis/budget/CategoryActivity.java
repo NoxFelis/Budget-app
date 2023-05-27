@@ -1,6 +1,4 @@
-package sneiger.budget;
-
-import androidx.appcompat.app.AppCompatActivity;
+package nfelis.budget;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +8,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import sneiger.budget.databinding.ActivityCategoryBinding;
-import sneiger.budget.databinding.ActivitySettingsBinding;
+import nfelis.budget.R;
+import nfelis.budget.databinding.ActivityCategoryBinding;
 
 public class CategoryActivity extends MainActivity {
     private ListView categoryListView;

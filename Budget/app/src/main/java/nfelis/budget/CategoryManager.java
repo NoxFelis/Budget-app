@@ -1,4 +1,4 @@
-package sneiger.budget;
+package nfelis.budget;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.io.File;
 
 public class CategoryManager extends SQLiteOpenHelper {
@@ -32,12 +30,14 @@ public class CategoryManager extends SQLiteOpenHelper {
     {
         if(categoryManager == null) {
             if (custom) {
-                DATABASE_CATEGORIES = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + "/sneiger.budget/Category.db";
+                DATABASE_CATEGORIES = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + "/nfelis.budget/Category.db";
             } else {
                 DATABASE_CATEGORIES = "CategoryDB";
             }
             categoryManager = new CategoryManager(context);
         }
+
+        File file = new File(DATABASE_CATEGORIES);
         return categoryManager;
     }
 
@@ -77,6 +77,22 @@ public class CategoryManager extends SQLiteOpenHelper {
 
         sqLiteDatabase.insert(TABLE_NAME, null, autre);
         Category.categoryMap.put(number_categories,new Category(number_categories,"Autre",0,"#FFFFFF",false,false));
+
+
+        File databaseFile = new File(DATABASE_CATEGORIES);
+
+        if (databaseFile.exists()) {
+            // Set the file permissions to readable and writable
+            boolean success = databaseFile.setReadable(true,false);
+            databaseFile.setWritable(true,false);
+        }
+
+        databaseFile = new File(DATABASE_CATEGORIES+"-jounal");
+        if (databaseFile.exists()) {
+            boolean success = databaseFile.setReadable(true,false);
+            databaseFile.setWritable(true,false);
+        }
+
 
     }
     @Override

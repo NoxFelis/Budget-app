@@ -1,4 +1,4 @@
-package sneiger.budget;
+package nfelis.budget;
 
 import org.junit.Test;
 

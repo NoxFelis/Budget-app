@@ -1,24 +1,14 @@
-package sneiger.budget;
+package nfelis.budget;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Pair;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -26,7 +16,6 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -37,8 +26,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import sneiger.budget.databinding.ActivityDetailBinding;
-import sneiger.budget.databinding.ActivityHomeBinding;
+import nfelis.budget.R;
+import nfelis.budget.databinding.ActivityDetailBinding;
 
 public class DetailActivity extends MainActivity {
     private ListView expenseListView;
