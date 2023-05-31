@@ -256,6 +256,44 @@ public class DetailActivity extends MainActivity {
         });
         dialog.show();
     }
+
+    public void rembourse(View view) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create(); //Read Update
+        alertDialog.setTitle("Rembourser");
+        alertDialog.setMessage("Comment êtes-vous remboursé.e?");
+
+        alertDialog.setButton3("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+            }
+        });
+
+        alertDialog.setButton2("Par cash", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                SQLiteManager expenseManager = SQLiteManager.instanceOfDatabase(getApplicationContext());
+                expenseManager.rembourseExpensesInDB(selectedItems,true);
+                alertDialog.dismiss();
+                expenseAdapter.notifyDataSetChanged();
+                setMultiple(false);
+                onResume();
+            }
+        });
+
+        alertDialog.setButton("Par virement", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                SQLiteManager expenseManager = SQLiteManager.instanceOfDatabase(getApplicationContext());
+                expenseManager.rembourseExpensesInDB(selectedItems,false);
+                alertDialog.dismiss();
+                expenseAdapter.notifyDataSetChanged();
+                setMultiple(false);
+                onResume();
+            }
+        });
+        alertDialog.show();
+    }
+
     private void setAllItemsChecked(boolean checked) {
         int itemCount = expenseAdapter.getCount();
         for (int i = 0; i < itemCount; i++) {

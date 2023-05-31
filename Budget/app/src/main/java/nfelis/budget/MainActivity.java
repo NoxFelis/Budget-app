@@ -7,9 +7,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -22,11 +27,12 @@ import nfelis.budget.R;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     DrawerLayout drawerLayout;
-    private SQLiteDatabase database;
+
 
     @Override
     protected void onCreate(Bundle savedInstances) {
         super.onCreate(savedInstances);
+        setContentView(R.layout.activity_main);
     }
 
     @Override
@@ -76,5 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void allocateActivityTitle(String titleString) {
         getSupportActionBar().setTitle(titleString);
     }
+
+
 
 }

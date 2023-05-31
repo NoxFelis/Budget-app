@@ -92,9 +92,24 @@
             app:backgroundTint="@color/delftBlue_2"
             app:layout_constraintStart_toEndOf="@id/deleteButton"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/rembourseButton"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/nav_category" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/rembourseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:importantForAccessibility="no"
+            android:onClick="rembourse"
+            android:tint="@color/platinum"
+            app:backgroundTint="@color/delftBlue_2"
+            app:layout_constraintStart_toEndOf="@id/changeButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/rembourse" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

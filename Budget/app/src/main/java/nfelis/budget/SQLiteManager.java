@@ -3,6 +3,7 @@ package nfelis.budget;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -18,9 +19,8 @@ import java.util.List;
 
 public class SQLiteManager extends SQLiteOpenHelper
 {
-    private static String customPath;
+    private static String path;
     private static SQLiteManager sqLiteManager;
-    public static final String DATABASE_EXPENSES = "ExpenseDB";
     private static final int DATABASE_VERSION = 1;
     private static final String TABLE_NAME = "Expense";
     private static final String COUNTER = "Counter";
@@ -40,10 +40,7 @@ public class SQLiteManager extends SQLiteOpenHelper
 
     public SQLiteManager(Context context)
     {
-        super(context, DATABASE_EXPENSES, null, DATABASE_VERSION);
-    }
-    public SQLiteManager(Context context, String customPath) {
-        super(context, customPath, null, DATABASE_VERSION);
+        super(context, path, null, DATABASE_VERSION);
     }
     public static SQLiteManager instanceOfDatabase(Context context)
     {
@@ -53,15 +50,10 @@ public class SQLiteManager extends SQLiteOpenHelper
     }
 
     public static SQLiteManager instanceOfDatabase(Context context, boolean custom) {
-
+        SharedPreferences preferences = context.getSharedPreferences("MyPrefs", context.MODE_PRIVATE);
+        path = preferences.getString("storage_expenses", null);
         if(sqLiteManager == null)
-            if (custom) {
-                customPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + "/nfelis.budget/Expense.db";
-                sqLiteManager =  new SQLiteManager(context,customPath);
-            } else {
-                sqLiteManager =  new SQLiteManager(context);
-            }
-
+            sqLiteManager =  new SQLiteManager(context);
         return sqLiteManager;
     }
 
@@ -258,6 +250,29 @@ public class SQLiteManager extends SQLiteOpenHelper
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         for (Expense expense : selectedItems.values()){
             expense.setCategory(id);
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ID_FIELD, expense.getId());
+            contentValues.put(TITLE_FIELD, expense.getTitle());
+            contentValues.put(CASH_FIELD,expense.isCash());
+            contentValues.put(RETRAIT_FIELD,expense.isRetrait());
+            contentValues.put(CATEGORY_FIELD,expense.getCategory());
+            contentValues.put(AMOUNT_FIELD,expense.getAmount());
+            contentValues.put(DATE_FIELD,Utils.getStringFromDate(expense.getDate(),dateFormat));
+            contentValues.put(REMBOURSE_FIELD,expense.isRembourse());
+            contentValues.put(REMBOURSE_CASH_FIELD,expense.isRembourseCash());
+
+            sqLiteDatabase.update(TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(expense.getId())});
+        }
+        sqLiteDatabase.close();
+    }
+
+    public void rembourseExpensesInDB(HashMap<Integer, Expense> selectedItems, boolean parCash) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        for (Expense expense : selectedItems.values()){
+            expense.setRembourse(true);
+            expense.setRembourseCash(parCash);
 
             ContentValues contentValues = new ContentValues();
             contentValues.put(ID_FIELD, expense.getId());
