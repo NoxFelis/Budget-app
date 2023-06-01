@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--below line is to create preference category-->
+    <PreferenceCategory android:title="General">
+        <Preference
+            android:title="Storage Location"
+            android:key="folderPicker"
+            android:summary="@string/default_storage"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

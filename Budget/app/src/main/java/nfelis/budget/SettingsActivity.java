@@ -15,6 +15,14 @@ public class SettingsActivity extends MainActivity {
         setContentView(activitySettingsBinding.getRoot());
         allocateActivityTitle("Settings");
 
+        if (findViewById(R.id.preferences) != null) {
+            if (savedInstanceState != null) {
+                return;
+            }
+            // below line is to inflate our fragment.
+            getFragmentManager().beginTransaction().add(R.id.preferences, new SettingsFragment()).commit();
+        }
+
     }
 
 }

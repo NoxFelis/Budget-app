@@ -1,6 +1,7 @@
 package nfelis.budget;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -203,10 +204,11 @@ public class HomeActivity extends MainActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         // Handle default option
                         try {
+                            Context context = getApplicationContext();
                             String defaultExpenses = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + "/nfelis.budget/Expense.db"; // Replace with your default location
-                            saveStorageLocation("storage_expenses", null,defaultExpenses);
+                            Utils.saveStorageLocation(context,"storage_expenses", null,defaultExpenses);
                             String defaultCategories = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + "/nfelis.budget/Category.db"; // Replace with your default location
-                            saveStorageLocation("storage_categories", null,defaultCategories);
+                            Utils.saveStorageLocation(context,"storage_categories", null,defaultCategories);
                         } catch (URISyntaxException e) {
                             throw new RuntimeException(e);
                         }
@@ -225,18 +227,7 @@ public class HomeActivity extends MainActivity {
                 .show();
     }
 
-    private void saveStorageLocation(String name, Uri uri,String file) throws URISyntaxException {
-        String location;
-        if (uri == null) {
-            location = file;
-        }else {
-            location = Utils.getPath(getApplicationContext(),uri) + "/nfelis.budget" + file;
-        }
-        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(name, location);
-        editor.apply();
-    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -244,10 +235,12 @@ public class HomeActivity extends MainActivity {
 
         if (requestCode == REQUEST_CODE_FILE_CHOOSER && resultCode == RESULT_OK) {
             Uri treeUri = data.getData();
+
             // Handle the selected location URI (treeUri) here
             try {
-                saveStorageLocation("storage_expenses", treeUri, "/Expenses.db");
-                saveStorageLocation("storage_categories", treeUri,"/Categories.db");
+                Utils.saveStorageLocation(this,"storage_location",treeUri,"");
+                Utils.saveStorageLocation(this,"storage_expenses", treeUri, "/Expenses.db");
+                Utils.saveStorageLocation(this,"storage_categories", treeUri,"/Categories.db");
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }

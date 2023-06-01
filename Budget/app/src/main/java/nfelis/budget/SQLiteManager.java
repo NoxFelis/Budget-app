@@ -289,4 +289,29 @@ public class SQLiteManager extends SQLiteOpenHelper
         }
         sqLiteDatabase.close();
     }
+
+    public void fillDB() {
+
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        for (Expense expense : Expense.expenseMap.values()){
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ID_FIELD, expense.getId());
+            contentValues.put(TITLE_FIELD, expense.getTitle());
+            contentValues.put(CASH_FIELD,expense.isCash());
+            contentValues.put(RETRAIT_FIELD,expense.isRetrait());
+            contentValues.put(CATEGORY_FIELD,expense.getCategory());
+            contentValues.put(AMOUNT_FIELD,expense.getAmount());
+            contentValues.put(DATE_FIELD,Utils.getStringFromDate(expense.getDate(),dateFormat));
+            contentValues.put(REMBOURSE_FIELD,expense.isRembourse());
+            contentValues.put(REMBOURSE_CASH_FIELD,expense.isRembourseCash());
+
+            sqLiteDatabase.update(TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(expense.getId())});
+        }
+        sqLiteDatabase.close();
+    }
+
+    public void deleteDB(Context context) {
+        context.deleteDatabase(path);
+        sqLiteManager =null;
+    }
 }

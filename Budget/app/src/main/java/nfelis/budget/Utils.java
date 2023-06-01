@@ -1,7 +1,10 @@
 package nfelis.budget;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -242,5 +245,44 @@ public class Utils {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }*/
 
+    public static void saveStorageLocation(Context context,String name, Uri uri,String file) throws URISyntaxException {
+        String location;
+        if (uri == null) {
+            location = file;
+        }else {
+            location = Utils.getPath(context,uri) + "/nfelis.budget" + file;
+        }
+        SharedPreferences preferences = context.getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(name, location);
+        editor.apply();
+    }
+
+    public static void transferExpenses(Context context,String path) throws URISyntaxException {
+        //upload all expenses
+        SQLiteManager old = SQLiteManager.instanceOfDatabase(context,true);
+        old.populateExpenseListArray(null,null);
+        old.deleteDB(context);
+
+        saveStorageLocation(context,"storage_expenses", null, path);
+        SQLiteManager nouveau = SQLiteManager.instanceOfDatabase(context,true);
+        nouveau.fillDB();
+    }
+
+    public static void transferCategories(Context context, String path) throws URISyntaxException {
+        CategoryManager old = CategoryManager.instanceOfDatabase(context,true);
+        old.populateCategorySet();
+        old.deleteDB(context);
+
+        saveStorageLocation(context,"storage_categories", null, path);
+        CategoryManager nouveau = CategoryManager.instanceOfDatabase(context,true);
+        nouveau.fillDB();
+    }
+
+    public static boolean comparePaths(Context context,String newPath) {
+        SharedPreferences preferences = context.getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String[] oldPath = preferences.getString("storage_expenses", null).split("/Expenses.db");
+        return oldPath[0].equals(newPath);
+    }
 
 }

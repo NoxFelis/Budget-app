@@ -167,4 +167,24 @@ public class CategoryManager extends SQLiteOpenHelper {
         categoryDatabase.close();
     }
 
+    public void deleteDB(Context context) {
+        context.deleteDatabase(DATABASE_CATEGORIES);
+        categoryManager =null;
+    }
+
+    public void fillDB() {
+        SQLiteDatabase categoryDatabase = this.getWritableDatabase();
+        for (Category category : Category.categoryMap.values()) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(CATEGORY_FIELD,category.getName());
+            contentValues.put(COLOR_FIELD,category.getColor());
+            contentValues.put(AMOUNT_FIELD,category.getAmount());
+            contentValues.put(VISIBLE_FIELD,category.isVisible());
+            contentValues.put(ID_FIELD,category.getId());
+            contentValues.put(BUDGET_FIELD,category.isInBudget());
+
+            categoryDatabase.update(TABLE_NAME,contentValues,ID_FIELD + " =? ", new String[]{String.valueOf(category.getId())});
+        }
+        categoryDatabase.close();
+    }
 }
