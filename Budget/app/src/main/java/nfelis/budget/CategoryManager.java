@@ -11,6 +11,7 @@ import android.os.Environment;
 import java.io.File;
 
 public class CategoryManager extends SQLiteOpenHelper {
+    private static String PREFS_NAME;
     public static CategoryManager categoryManager;
     public static String DATABASE_CATEGORIES;
     private static final int DATABASE_VERSION = 1;
@@ -26,10 +27,12 @@ public class CategoryManager extends SQLiteOpenHelper {
     public CategoryManager(Context context)
     {
         super(context, DATABASE_CATEGORIES, null, DATABASE_VERSION);
+
     }
     public static CategoryManager instanceOfDatabase(Context context,boolean custom)
     {
-        SharedPreferences preferences = context.getSharedPreferences("MyPrefs", context.MODE_PRIVATE);
+        PREFS_NAME = context.getString(R.string.prefName);
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
         DATABASE_CATEGORIES = preferences.getString("storage_categories", null);
         if(categoryManager == null)
             categoryManager =  new CategoryManager(context);
@@ -121,9 +124,11 @@ public class CategoryManager extends SQLiteOpenHelper {
         sqLiteDatabase.close();
 
     }
-    public void populateCategorySet() {
-        Category.categoryMap.clear();
+    public void populateCategorySet(boolean percent) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Category.categoryMap.clear();
+        Category.categoryNonMap.clear();
+
 
         try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME, null))
         {
@@ -139,7 +144,11 @@ public class CategoryManager extends SQLiteOpenHelper {
                     boolean inBudget = result.getInt(6)==1;
                     number_categories = Math.max(number_categories,id);
                     Category category = new Category(id,name,amount,color,visible,inBudget);
-                    Category.categoryMap.put(id,category);
+                    if (percent && !inBudget) {
+                        Category.categoryNonMap.put(id,category);
+                    } else {
+                        Category.categoryMap.put(id,category);
+                    }
                 }
             }
         }

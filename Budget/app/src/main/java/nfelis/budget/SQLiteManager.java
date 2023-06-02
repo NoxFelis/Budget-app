@@ -17,8 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class SQLiteManager extends SQLiteOpenHelper
-{
+public class SQLiteManager extends SQLiteOpenHelper {
+    private static String PREFS_NAME;
     private static String path;
     private static SQLiteManager sqLiteManager;
     private static final int DATABASE_VERSION = 1;
@@ -41,6 +41,7 @@ public class SQLiteManager extends SQLiteOpenHelper
     public SQLiteManager(Context context)
     {
         super(context, path, null, DATABASE_VERSION);
+        PREFS_NAME = context.getString(R.string.prefName);
     }
     public static SQLiteManager instanceOfDatabase(Context context)
     {
@@ -50,7 +51,7 @@ public class SQLiteManager extends SQLiteOpenHelper
     }
 
     public static SQLiteManager instanceOfDatabase(Context context, boolean custom) {
-        SharedPreferences preferences = context.getSharedPreferences("MyPrefs", context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
         path = preferences.getString("storage_expenses", null);
         if(sqLiteManager == null)
             sqLiteManager =  new SQLiteManager(context);

@@ -10,27 +10,32 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.FileUtils;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.EditTextPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreference;
+
 
 import java.io.File;
 import java.net.URISyntaxException;
 
 public class SettingsFragment extends PreferenceFragment {
     private static final int REQUEST_CODE_FILE_CHOOSER = 1001;
+    private static String PREFS_NAME, PERCENTAGE;
     Preference folderPicker;
+    SwitchPreference percentage;
+    EditTextPreference total;
     Context context;
+    private static SharedPreferences preferences;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // below line is used to add preference
-        // fragment from our xml folder.
+    public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
         addPreferencesFromResource(R.xml.preferences);
         initWidgets();
         fillWidgets();
@@ -38,8 +43,15 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void initWidgets() {
-        folderPicker = (Preference) findPreference("folderPicker");
         context = getContext();
+        PREFS_NAME = context.getString(R.string.prefName);
+        PERCENTAGE = context.getString(R.string.percentage);
+
+        folderPicker = (Preference) findPreference("folderPicker");
+        percentage = (SwitchPreference) findPreference(PERCENTAGE);
+        total = (EditTextPreference) findPreference(context.getString(R.string.total));
+
+        preferences = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
     }
 
     private void setOnClickListeners() {
@@ -53,12 +65,40 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
+
+        percentage.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+                boolean checked = (boolean) newValue;
+                total.setEnabled(checked);
+
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(PERCENTAGE,checked);
+                editor.apply();
+                return true;
+            }
+        });
+
+        total.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+                int value = Integer.parseInt(((String) newValue));
+                String TOTAL = context.getString(R.string.total);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt(TOTAL,value);
+                editor.apply();
+                return true;
+            }
+        });
     }
 
     private void fillWidgets() {
-        SharedPreferences preferences = context.getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String path = preferences.getString("storage_location", null);
         folderPicker.setSummary(path);
+
+        boolean checked = preferences.getBoolean(PERCENTAGE,false);
+        percentage.setChecked(checked);
+        total.setEnabled(checked);
     }
 
     @Override
@@ -71,6 +111,7 @@ public class SettingsFragment extends PreferenceFragment {
             try {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setCancelable(false);  // Disable dismiss behavior
+                builder.setMessage("Select a storage location for your data");
 
                 LayoutInflater inflater = LayoutInflater.from(context);
                 /*View dialogView = inflater.inflate(R.layout.custom_dialog_layout, null);  // Replace with your custom layout

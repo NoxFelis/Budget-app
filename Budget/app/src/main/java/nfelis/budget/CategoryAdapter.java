@@ -16,7 +16,6 @@ import java.util.List;
 import nfelis.budget.R;
 
 public class CategoryAdapter extends ArrayAdapter<Category> {
-
     private Context context;
     private List<Category> categories;
     int platinum;

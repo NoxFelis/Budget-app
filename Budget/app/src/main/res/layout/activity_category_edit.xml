@@ -63,7 +63,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
-            android:hint="Budget attribué"
+            android:hint="@string/budget_hard"
             android:inputType="number"
             android:textColor="@color/platinum"
             android:textColorHint="@color/timberwolf"

@@ -80,7 +80,7 @@ public class PeriodeActivity extends MainActivity {
 
     private void loadFromDBToMemory() {
         CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this,true);
-        categoryManager.populateCategorySet();
+        categoryManager.populateCategorySet(false);
 
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this,true);
         sqLiteManager.populateExpenseListArray(startDate,endDate);

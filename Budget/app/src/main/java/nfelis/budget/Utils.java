@@ -183,6 +183,16 @@ public class Utils {
         return showDate(startMonth,startYear) + " - " + showDate(endMonth,endYear);
     }
 
+    public static int getMaxDepense() {
+        int maxDepense = 0;
+        for (Category category : Category.categoryMap.values()) {
+            if (category.isInBudget()) {
+                maxDepense += category.getAmount()*100;
+            }
+        }
+        return maxDepense;
+    }
+
     @SuppressLint("NewApi")
     public static String getPath(Context context, Uri uri) throws URISyntaxException {
         final boolean needToCheckUri = Build.VERSION.SDK_INT >= 19;
@@ -252,7 +262,7 @@ public class Utils {
         }else {
             location = Utils.getPath(context,uri) + "/nfelis.budget" + file;
         }
-        SharedPreferences preferences = context.getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.prefName), MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(name, location);
         editor.apply();
@@ -271,7 +281,7 @@ public class Utils {
 
     public static void transferCategories(Context context, String path) throws URISyntaxException {
         CategoryManager old = CategoryManager.instanceOfDatabase(context,true);
-        old.populateCategorySet();
+        old.populateCategorySet(false);
         old.deleteDB(context);
 
         saveStorageLocation(context,"storage_categories", null, path);

@@ -155,7 +155,7 @@ public class ExpenseEditActivity extends AppCompatActivity {
 
     private void loadFromDBToMemory() {
         CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this,true);
-        categoryManager.populateCategorySet();
+        categoryManager.populateCategorySet(false);
     }
 
     private void setAdapter() {

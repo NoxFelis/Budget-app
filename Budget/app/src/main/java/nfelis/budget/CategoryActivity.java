@@ -1,10 +1,13 @@
 package nfelis.budget;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -12,7 +15,11 @@ import nfelis.budget.R;
 import nfelis.budget.databinding.ActivityCategoryBinding;
 
 public class CategoryActivity extends MainActivity {
-    private ListView categoryListView;
+    private ListView categoryListView,categoryNonListView;  //List views of the category activity
+    private TextView total;     // text view to show total of budget
+    private boolean percent;    // boolean to know if in percentage mode or not
+    private String PREFS_NAME,PERCENTAGE;       // names of shared preference and access to element
+    private int maxDepense;                     // value of total in budget
     ActivityCategoryBinding activityCategoryBinding;
 
     @Override
@@ -22,24 +29,56 @@ public class CategoryActivity extends MainActivity {
         setContentView(activityCategoryBinding.getRoot());
         allocateActivityTitle("Catégories");
 
+        Context context = getApplicationContext();
+        PREFS_NAME = context.getString(R.string.prefName);
+        PERCENTAGE = context.getString(R.string.percentage);
+
+
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        percent = preferences.getBoolean(PERCENTAGE, false);
+        if (percent) {
+            String value = context.getString(R.string.total);
+            maxDepense = Integer.parseInt(preferences.getString(value,context.getString(R.string.default_total)));
+        }
+
         initWidgets();
+        setVisibility();
         loadFromDBToMemory();
         setOnClickListener();
-
     }
 
     private void initWidgets() {
         categoryListView = findViewById(R.id.categoryListView);
+        categoryNonListView = findViewById(R.id.categoryNonListView);
+        total = findViewById(R.id.total);
+    }
+
+    private void setVisibility() {
+        if (percent) {
+            categoryNonListView.setVisibility(View.VISIBLE);
+            total.setVisibility(View.VISIBLE);
+            String text = "Total " + maxDepense + "€";
+            total.setText(text);
+        } else {
+            categoryNonListView.setVisibility(View.GONE);
+            total.setVisibility(View.GONE);
+        }
     }
 
     private void loadFromDBToMemory() {
         CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this,true);
-        categoryManager.populateCategorySet();
+        categoryManager.populateCategorySet(percent);
+
     }
 
     private void setCategoryAdapter() {
         CategoryAdapter adapter = new CategoryAdapter(getApplicationContext(), new ArrayList<Category>(Category.categoryMap.values()));
         categoryListView.setAdapter(adapter);
+        if (percent) {
+            CategoryAdapter adapterNon = new CategoryAdapter(getApplicationContext(), new ArrayList<Category>(Category.categoryNonMap.values()));
+            categoryNonListView.setAdapter(adapterNon);
+        }
+
     }
 
     private void setOnClickListener() {
@@ -48,6 +87,16 @@ public class CategoryActivity extends MainActivity {
             public void onItemClick(AdapterView<?> listView, View view,
                                     int position, long column) {
                 Category selectedCategory = (Category) categoryListView.getItemAtPosition(position);
+                Intent editCategoryIntent = new Intent(getApplicationContext(), CategoryEditActivity.class);
+                editCategoryIntent.putExtra(Category.CATEGORY_EDIT_EXTRA,selectedCategory.getId());
+                startActivity(editCategoryIntent);
+            }
+        });
+        categoryNonListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> listView, View view,
+                                    int position, long column) {
+                Category selectedCategory = (Category) categoryNonListView.getItemAtPosition(position);
                 Intent editCategoryIntent = new Intent(getApplicationContext(), CategoryEditActivity.class);
                 editCategoryIntent.putExtra(Category.CATEGORY_EDIT_EXTRA,selectedCategory.getId());
                 startActivity(editCategoryIntent);

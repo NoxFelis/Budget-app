@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -26,11 +28,16 @@ public class CategoryEditActivity extends AppCompatActivity {
     private View colorView;
     private FloatingActionButton deleteButton;
     private Category selectedCategory;
+    private boolean percent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_edit);
+
+        Context context = getApplicationContext();
+        SharedPreferences preferences = getSharedPreferences(context.getString(R.string.prefName), MODE_PRIVATE);
+        percent = preferences.getBoolean(context.getString(R.string.percentage), false);
 
         initWidgets();
         checkForEditCategory();
@@ -98,15 +105,32 @@ public class CategoryEditActivity extends AppCompatActivity {
                 } else {
                     Category category = new Category(0, name, amount, color, visible, inBudget);
                     categoryManager.addCategoryToDatabase(category);
-                    Category.categoryMap.put(category.getId(), category);
+                    if (percent && !inBudget) {
+                        Category.categoryNonMap.put(category.getId(),category);
+                    } else {
+                        Category.categoryMap.put(category.getId(), category);
+                    }
                 }
             } else {
+                boolean previous = selectedCategory.isInBudget();
                 selectedCategory.setAmount(amount);
                 selectedCategory.setColor(color);
                 selectedCategory.setVisible(visible);
                 selectedCategory.setInBudget(inBudget);
                 categoryManager.updateCategoryInDB(selectedCategory);
-                Category.categoryMap.put(selectedCategory.getId(),selectedCategory);
+                int id = selectedCategory.getId();
+                if (percent && !inBudget) {
+                    Category.categoryNonMap.put(id,selectedCategory);
+                } else {
+                    Category.categoryMap.put(id,selectedCategory);
+                }
+                if (previous != inBudget) {
+                    if (previous) {
+                        Category.categoryMap.remove(id);
+                    } else {
+                        Category.categoryNonMap.remove(id);
+                    }
+                }
             }
             finish();
         } catch (IllegalArgumentException e) {

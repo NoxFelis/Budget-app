@@ -34,7 +34,7 @@ import nfelis.budget.databinding.ActivityHomeBinding;
 public class HomeActivity extends MainActivity {
     private static final int REQUEST_CODE_FILE_CHOOSER = 1001;
     private static boolean isFirstLaunch;
-    private static final String PREFS_NAME = "MyPrefs";
+    private static String PREFS_NAME;
     private static final String PREF_FIRST_LAUNCH = "FirstLaunch";
     private PieChart pieChart;
     private LinkedHashMap<String,Integer> colors;
@@ -53,6 +53,7 @@ public class HomeActivity extends MainActivity {
         setContentView(activityHomeBinding.getRoot());
         allocateActivityTitle("Home");
 
+        PREFS_NAME = getApplicationContext().getString(R.string.prefName);
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         isFirstLaunch = preferences.getBoolean(PREF_FIRST_LAUNCH, true);
 
@@ -74,21 +75,16 @@ public class HomeActivity extends MainActivity {
 
     private void loadFromDBToMemory() {
         CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this,true);
-        categoryManager.populateCategorySet();
+        categoryManager.populateCategorySet(false);
 
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this,true);
         sqLiteManager.populateExpenseListArray(startDate,endDate);
     }
 
     private void getMaxDepense() {
-        maxDepense = 0;
-        for (Category category : Category.categoryMap.values()) {
-            if (category.isInBudget()) {
-                maxDepense += category.getAmount()*100;
-            }
-        }
-        resteBudget.setMax(maxDepense);
+        resteBudget.setMax(Utils.getMaxDepense());
     }
+
 
     private void setDaysLimits() {
         Calendar cal = Calendar.getInstance();
