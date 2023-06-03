@@ -16,7 +16,7 @@
         <EditTextPreference
             android:title="Budget Total"
             android:key="@string/total"
-            android:defaultValue="@string/default_total"
+            android:defaultValue="200"
             android:enabled="false"
             android:inputType="number"/>
     </PreferenceCategory>

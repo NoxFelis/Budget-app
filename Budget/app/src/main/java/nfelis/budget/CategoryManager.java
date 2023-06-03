@@ -196,4 +196,14 @@ public class CategoryManager extends SQLiteOpenHelper {
         }
         categoryDatabase.close();
     }
+
+    public void setBudget0() {
+        SQLiteDatabase categoryDatabase = this.getWritableDatabase();
+
+        // Construct the SQL update statement
+        String sql = "UPDATE " + TABLE_NAME + " SET " + AMOUNT_FIELD + " = 0 WHERE " + BUDGET_FIELD + " = 1";
+
+        // Execute the update statement
+        categoryDatabase.execSQL(sql);
+    }
 }

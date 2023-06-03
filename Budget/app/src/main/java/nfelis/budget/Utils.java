@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -295,4 +296,22 @@ public class Utils {
         return oldPath[0].equals(newPath);
     }
 
+    public static int getResteDepense(Context context,int id) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.prefName), MODE_PRIVATE);
+        int maxDepense = preferences.getInt(context.getString(R.string.total),Integer.parseInt(context.getString(R.string.default_total)));
+        int occupied = 0;
+        for (Category category : Category.categoryMap.values()) {
+            if (id!=category.getId()) {
+                int value = category.getAmount();
+                occupied += Math.round( ((float)value / maxDepense) * 100);
+            }
+        }
+        return 100-occupied;
+    }
+
+    public static int getPercentage(Context context,int amount) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.prefName), MODE_PRIVATE);
+        int maxDepense = preferences.getInt(context.getString(R.string.total),Integer.parseInt(context.getString(R.string.default_total)));
+        return Math.round(((float) amount/maxDepense)*100);
+    }
 }

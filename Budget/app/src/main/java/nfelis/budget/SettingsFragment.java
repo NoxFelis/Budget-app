@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -70,6 +71,25 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
                 boolean checked = (boolean) newValue;
+                if (checked) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(context).create(); //Read Update
+                    alertDialog.setTitle("Passer en pourcentage");
+                    alertDialog.setMessage("Si vous continuez, les catégories comptabilisées seront toutes mises à zéros");
+
+                    alertDialog.setButton2("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    alertDialog.setButton("Continuer", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            CategoryManager categoryManager = CategoryManager.instanceOfDatabase(context,true);
+                            categoryManager.setBudget0();
+                        }
+                    });
+                    alertDialog.show();  //<-- See This!
+                }
                 total.setEnabled(checked);
 
                 SharedPreferences.Editor editor = preferences.edit();

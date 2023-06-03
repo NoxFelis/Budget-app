@@ -3,6 +3,7 @@ package nfelis.budget;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,7 +39,9 @@ public class CategoryActivity extends MainActivity {
         percent = preferences.getBoolean(PERCENTAGE, false);
         if (percent) {
             String value = context.getString(R.string.total);
-            maxDepense = Integer.parseInt(preferences.getString(value,context.getString(R.string.default_total)));
+
+            // TODO
+            maxDepense = preferences.getInt(value,Integer.parseInt(context.getString(R.string.default_total)));
         }
 
         initWidgets();

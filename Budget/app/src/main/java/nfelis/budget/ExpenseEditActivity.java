@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Switch;
 
@@ -84,6 +85,7 @@ public class ExpenseEditActivity extends AppCompatActivity {
     public void openDatePicker(View view) {
         datePickerDialog.show();
     }
+
 
     private void setListeners() {
         switchRetrait.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
