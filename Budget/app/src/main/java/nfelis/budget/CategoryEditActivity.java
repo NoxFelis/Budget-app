@@ -108,16 +108,17 @@ public class CategoryEditActivity extends AppCompatActivity {
     public void saveCategory(View view) {
         CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this,true);
         String name = String.valueOf(nameEdit.getText()).trim();
-        boolean checked = switchInBudget.isChecked();
+        boolean previous = selectedCategory.isInBudget();
 
         int amount;
-        if (percent && checked) {
+        if (percent && previous) {
             int value = Integer.parseInt(String.valueOf(amountButton.getText()));
             amount = Math.round((float) value*maxDepense/100);
         } else {
             String value = String.valueOf(amountEdit.getText());
             amount = (value.length() == 0) ? 0 : Integer.parseInt(value);
         }
+        boolean checked = switchInBudget.isChecked();
         boolean visible = switchVisible.isChecked();
         String color = Utils.returnHEX(String.valueOf(colorEdit.getText()));
 
@@ -145,7 +146,7 @@ public class CategoryEditActivity extends AppCompatActivity {
                     }
                 }
             } else {
-                boolean previous = selectedCategory.isInBudget();
+
                 selectedCategory.setAmount(amount);
                 selectedCategory.setColor(color);
                 selectedCategory.setVisible(visible);
