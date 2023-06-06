@@ -29,11 +29,11 @@ public class CategoryManager extends SQLiteOpenHelper {
         super(context, DATABASE_CATEGORIES, null, DATABASE_VERSION);
 
     }
-    public static CategoryManager instanceOfDatabase(Context context,boolean custom)
+    public static CategoryManager instanceOfDatabase(Context context)
     {
         PREFS_NAME = context.getString(R.string.prefName);
         SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
-        DATABASE_CATEGORIES = preferences.getString("storage_categories", null);
+        DATABASE_CATEGORIES = preferences.getString("storage_location", null) + "/Category.db";
         if(categoryManager == null)
             categoryManager =  new CategoryManager(context);
         return categoryManager;

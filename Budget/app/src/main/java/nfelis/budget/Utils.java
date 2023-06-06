@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.util.Pair;
 import android.widget.ListView;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -184,11 +185,18 @@ public class Utils {
         return showDate(startMonth,startYear) + " - " + showDate(endMonth,endYear);
     }
 
-    public static int getMaxDepense() {
+    public static int getMaxDepense(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.prefName), MODE_PRIVATE);
+        boolean percent = preferences.getBoolean(context.getString(R.string.percentage),false);
+
         int maxDepense = 0;
-        for (Category category : Category.categoryMap.values()) {
-            if (category.isInBudget()) {
-                maxDepense += category.getAmount()*100;
+        if (percent) {
+            maxDepense = preferences.getInt(context.getString(R.string.total),Integer.parseInt(context.getString(R.string.default_total)))*100;
+        } else {
+            for (Category category : Category.categoryMap.values()) {
+                if (category.isInBudget()) {
+                    maxDepense += category.getAmount()*100;
+                }
             }
         }
         return maxDepense;
@@ -261,7 +269,7 @@ public class Utils {
         if (uri == null) {
             location = file;
         }else {
-            location = Utils.getPath(context,uri) + "/nfelis.budget" + file;
+            location = Utils.getPath(context,uri) + file + "/nfelis.budget";
         }
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.prefName), MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -269,7 +277,7 @@ public class Utils {
         editor.apply();
     }
 
-    public static void transferExpenses(Context context,String path) throws URISyntaxException {
+   /* public static void transferExpenses(Context context,String path) throws URISyntaxException {
         //upload all expenses
         SQLiteManager old = SQLiteManager.instanceOfDatabase(context,true);
         old.populateExpenseListArray(null,null);
@@ -288,12 +296,35 @@ public class Utils {
         saveStorageLocation(context,"storage_categories", null, path);
         CategoryManager nouveau = CategoryManager.instanceOfDatabase(context,true);
         nouveau.fillDB();
+    }*/
+
+    public static void transfer(Context context, String path) throws URISyntaxException {
+        SharedPreferences preferences = context.getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String oldPath = preferences.getString("storage_location", null);
+
+        SQLiteManager old = SQLiteManager.instanceOfDatabase(context);
+        old.populateExpenseListArray(null,null);
+        old.deleteDB(context);
+        CategoryManager oldCategory = CategoryManager.instanceOfDatabase(context);
+        oldCategory.populateCategorySet(false);
+        oldCategory.deleteDB(context);
+
+        saveStorageLocation(context,"storage_location", null, path);
+
+        SQLiteManager nouveau = SQLiteManager.instanceOfDatabase(context);
+        nouveau.fillDB();
+        CategoryManager nouveauCategory = CategoryManager.instanceOfDatabase(context);
+        nouveauCategory.fillDB();
+
+        File file = new File(oldPath);
+        boolean deleted = file.delete();
+        System.out.println(deleted);
     }
 
     public static boolean comparePaths(Context context,String newPath) {
         SharedPreferences preferences = context.getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String[] oldPath = preferences.getString("storage_expenses", null).split("/Expenses.db");
-        return oldPath[0].equals(newPath);
+        String oldPath = preferences.getString("storage_location", null);
+        return oldPath.equals(newPath);
     }
 
     public static int getResteDepense(Context context,int id) {

@@ -37,7 +37,7 @@ public class DetailActivity extends MainActivity {
     private String startDate,endDate;
     private Button nextButton;
     private CheckBox checkBox;
-    private boolean isMultipleMode,itemclicked;
+    private boolean isMultipleMode;
     private ConstraintLayout multipleChoiceButtons;
     private ExpenseAdapter expenseAdapter;
     private FloatingActionButton deleteButton,changeButton;
@@ -57,7 +57,6 @@ public class DetailActivity extends MainActivity {
         List<String> days = Utils.setDateLimits(month,year);
         startDate = days.get(0);
         endDate = days.get(1);
-        setExpenseAdapter();
     }
     private void initWidgets()
     {
@@ -93,7 +92,6 @@ public class DetailActivity extends MainActivity {
                     Intent editExpenseIntent = new Intent(getApplicationContext(), ExpenseEditActivity.class);
                     editExpenseIntent.putExtra(Expense.EXPENSE_EDIT_EXTRA, selectedExpense.getId());
                     startActivity(editExpenseIntent);
-                    itemclicked=true;
                 } else {
                     if (expenseListView.isItemChecked(position)) {
                         selectedItems.put(position,selectedExpense);
@@ -107,7 +105,7 @@ public class DetailActivity extends MainActivity {
     }
     private void loadFromDBToMemory()
     {
-        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this,true);
+        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.populateExpenseListArray(startDate,endDate);
     }
     private void getTodaysDate() {
@@ -213,7 +211,7 @@ public class DetailActivity extends MainActivity {
         alertDialog.setButton("Oui", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(view.getContext(),true);
+                SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(view.getContext());
                 sqLiteManager.deleteExpensesInDB(selectedItems);
                 selectedItems.clear();
                 alertDialog.dismiss();
@@ -307,7 +305,6 @@ public class DetailActivity extends MainActivity {
         super.onResume();
         loadFromDBToMemory();
         setExpenseAdapter();
-        itemclicked=false;
         enableButton(!(month==thisMonth && year==thisYear));
         setListener();
     }

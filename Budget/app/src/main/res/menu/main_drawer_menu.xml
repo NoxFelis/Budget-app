@@ -20,6 +20,10 @@
             android:icon="@drawable/nav_periode"
             android:title="Détail par période"/>
         <item
+            android:id="@+id/nav_subscription"
+            android:icon="@drawable/subscription"
+            android:title="Paiements automatiques"/>
+        <item
             android:id="@+id/nav_category"
             android:icon="@drawable/nav_category"
             android:title="Catégories"/>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SubscriptionActivity"
+    android:id="@+id/nav_subscription"
+    android:orientation="vertical"
+    android:background="@color/delftBlue">
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="setMultiple"
+        android:text="selection"
+        android:textColor="@color/platinum"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/subscriptionListView"/>
+
+    <ListView
+        android:id="@+id/subscriptionListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="3dp"
+        android:dividerHeight="3dp"
+        android:divider="@color/delftBlue"
+        android:layout_weight="1"
+        app:layout_constraintTop_toBottomOf="@id/checkBox"
+        app:layout_constraintBottom_toTopOf="@id/addSubscriptionButton"/>
+
+    <Button
+        android:id="@+id/addSubscriptionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:backgroundTint="@color/delftBlue_2"
+        android:onClick="newSubscription"
+        android:text="Add Subscription"
+        android:textColor="@color/platinum"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subscriptionListView"
+        app:layout_constraintBottom_toTopOf="@id/multipleChoiceButtons" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/multipleChoiceButtons"
+        android:padding="3dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:importantForAccessibility="no"
+            android:onClick="deleteSubscriptions"
+            android:tint="@color/platinum"
+            app:backgroundTint="@color/delftBlue_2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/changeButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/delete"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/changeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:importantForAccessibility="no"
+            android:onClick="changeCategory"
+            android:tint="@color/platinum"
+            app:backgroundTint="@color/delftBlue_2"
+            app:layout_constraintStart_toEndOf="@id/deleteButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/deactivate"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/nav_category" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/deactivate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:importantForAccessibility="no"
+            android:onClick="deactivate"
+            android:tint="@color/platinum"
+            app:backgroundTint="@color/delftBlue_2"
+            app:layout_constraintStart_toEndOf="@id/changeButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/subscription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

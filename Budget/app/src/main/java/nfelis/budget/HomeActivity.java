@@ -74,15 +74,16 @@ public class HomeActivity extends MainActivity {
     }
 
     private void loadFromDBToMemory() {
-        CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this,true);
+        CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this);
         categoryManager.populateCategorySet(false);
 
-        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this,true);
+        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.populateExpenseListArray(startDate,endDate);
     }
 
     private void getMaxDepense() {
-        resteBudget.setMax(Utils.getMaxDepense());
+        maxDepense = Utils.getMaxDepense(getApplicationContext());
+        resteBudget.setMax(maxDepense);
     }
 
 
@@ -201,10 +202,8 @@ public class HomeActivity extends MainActivity {
                         // Handle default option
                         try {
                             Context context = getApplicationContext();
-                            String defaultExpenses = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + "/nfelis.budget/Expense.db"; // Replace with your default location
-                            Utils.saveStorageLocation(context,"storage_expenses", null,defaultExpenses);
-                            String defaultCategories = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + "/nfelis.budget/Category.db"; // Replace with your default location
-                            Utils.saveStorageLocation(context,"storage_categories", null,defaultCategories);
+                            String defaultLocation =  Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()+"/nfelis.budget";
+                            Utils.saveStorageLocation(context,"storage_location", null,defaultLocation);
                         } catch (URISyntaxException e) {
                             throw new RuntimeException(e);
                         }
@@ -235,8 +234,6 @@ public class HomeActivity extends MainActivity {
             // Handle the selected location URI (treeUri) here
             try {
                 Utils.saveStorageLocation(this,"storage_location",treeUri,"");
-                Utils.saveStorageLocation(this,"storage_expenses", treeUri, "/Expenses.db");
-                Utils.saveStorageLocation(this,"storage_categories", treeUri,"/Categories.db");
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }

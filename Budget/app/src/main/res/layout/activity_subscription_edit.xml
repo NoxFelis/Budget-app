@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SubscriptionEditActivity"
+    android:background="@color/delftBlue">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Titre"
+            android:textColor="@color/platinum"
+            android:textStyle="bold"
+            android:textSize="24sp"/>
+
+        <EditText
+            android:id="@+id/titreEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="20dp"
+            android:hint="Titre de la dépense"
+            android:maxLines="1"
+            android:textColor="@color/platinum"
+            android:textColorHint="@color/timberwolf"
+            android:textSize="22sp"
+            android:inputType="text"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Prix"
+            android:textColor="@color/platinum"
+            android:textStyle="bold"
+            android:textSize="24sp"/>
+
+        <EditText
+            android:id="@+id/editTextNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="Prix de la dépense"
+            android:inputType="number|numberDecimal"
+            android:textColor="@color/platinum"
+            android:textColorHint="@color/timberwolf"
+            android:textSize="22sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Catégorie"
+            android:textColor="@color/platinum"
+            android:textStyle="bold"
+            android:textSize="24sp"/>
+
+        <Spinner
+            android:id="@+id/categorySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:minHeight="48dp"
+            android:textColor="@color/platinum"
+            android:textSize="22sp"/>
+
+        <Switch
+            android:id="@+id/switchDeactivated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Désactivé"
+            android:textColor="@color/platinum"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+    </LinearLayout>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:importantForAccessibility="no"
+        android:src="@drawable/check"
+        android:tint="@color/platinum"
+        app:backgroundTint="@color/delftBlue_2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="ImageContrastCheck"
+        android:onClick="saveSubscription"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:importantForAccessibility="no"
+        android:tint="@color/platinum"
+        app:backgroundTint="@color/delftBlue_2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/cancel"
+        tools:ignore="ImageContrastCheck"
+        android:onClick="cancel"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/delete"
+        android:importantForAccessibility="no"
+        android:tint="@color/platinum"
+        app:backgroundTint="@color/delftBlue_2"
+        android:onClick="deleteSubscription"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

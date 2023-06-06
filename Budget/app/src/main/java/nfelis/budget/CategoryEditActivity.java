@@ -106,7 +106,7 @@ public class CategoryEditActivity extends AppCompatActivity {
     }
 
     public void saveCategory(View view) {
-        CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this,true);
+        CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this);
         String name = String.valueOf(nameEdit.getText()).trim();
         boolean previous = selectedCategory.isInBudget();
 
@@ -184,10 +184,10 @@ public class CategoryEditActivity extends AppCompatActivity {
 
 
     public void deleteCategory(View view) {
-        CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this,true);
+        CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this);
         categoryManager.deleteCategoryInDB(selectedCategory);
 
-        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this,true);
+        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.deleteCategoryInDB(selectedCategory);
         finish();
     }

@@ -84,7 +84,7 @@ public class SettingsFragment extends PreferenceFragment {
                     alertDialog.setButton("Continuer", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            CategoryManager categoryManager = CategoryManager.instanceOfDatabase(context,true);
+                            CategoryManager categoryManager = CategoryManager.instanceOfDatabase(context);
                             categoryManager.setBudget0();
                         }
                     });
@@ -113,7 +113,7 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void fillWidgets() {
-        String path = preferences.getString("storage_location", null);
+        String path = preferences.getString("storage_location", context.getString(R.string.default_storage));
         folderPicker.setSummary(path);
 
         boolean checked = preferences.getBoolean(PERCENTAGE,false);
@@ -143,16 +143,11 @@ public class SettingsFragment extends PreferenceFragment {
                 // Perform your long-running task here
                 String path = Utils.getPath(context,treeUri);
                 if (!Utils.comparePaths(context,path)) {
-                    Utils.transferExpenses(context,path+"/Expenses.db");
-                    Utils.transferCategories(context,path+"/Categories.db");
-                    Utils.saveStorageLocation(context,"storage_location",null,path);
-                    File file = new File(path);
-                    file.delete();
+                    Utils.transfer(context,path);
                 }
 
                 alertDialog.dismiss();
-                /*Utils.saveStorageLocation(getContext(),"storage_expenses", treeUri, "/Expenses.db");
-                Utils.saveStorageLocation(getContext(),"storage_categories", treeUri,"/Categories.db");*/
+                fillWidgets();
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }

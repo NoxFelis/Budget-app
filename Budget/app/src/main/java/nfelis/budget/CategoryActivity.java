@@ -69,7 +69,7 @@ public class CategoryActivity extends MainActivity {
     }
 
     private void loadFromDBToMemory() {
-        CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this,true);
+        CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this);
         categoryManager.populateCategorySet(percent);
 
     }

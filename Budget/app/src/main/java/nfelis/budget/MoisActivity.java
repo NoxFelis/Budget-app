@@ -79,10 +79,10 @@ public class MoisActivity extends MainActivity {
     }
 
     private void loadFromDBToMemory() {
-        CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this,true);
+        CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this);
         categoryManager.populateCategorySet(false);
 
-        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this,true);
+        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.populateExpenseListArray(startDate,endDate);
     }
 

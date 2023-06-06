@@ -74,6 +74,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (item.getItemId() == R.id.nav_category) {
             startActivity(new Intent(this, CategoryActivity.class));
             overridePendingTransition(0, 0);
+        } else if (item.getItemId() == R.id.nav_subscription) {
+            startActivity(new Intent(this, SubscriptionActivity.class));
+            overridePendingTransition(0, 0);
         }
         return false;
 

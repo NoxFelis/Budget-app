@@ -41,18 +41,12 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public SQLiteManager(Context context)
     {
         super(context, path, null, DATABASE_VERSION);
-        PREFS_NAME = context.getString(R.string.prefName);
-    }
-    public static SQLiteManager instanceOfDatabase(Context context)
-    {
-        if(sqLiteManager == null)
-            sqLiteManager =  new SQLiteManager(context);
-        return sqLiteManager;
     }
 
-    public static SQLiteManager instanceOfDatabase(Context context, boolean custom) {
+    public static SQLiteManager instanceOfDatabase(Context context) {
+        PREFS_NAME = context.getString(R.string.prefName);
         SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
-        path = preferences.getString("storage_expenses", null);
+        path = preferences.getString("storage_location", null)+"/Expense.db";
         if(sqLiteManager == null)
             sqLiteManager =  new SQLiteManager(context);
         return sqLiteManager;
@@ -226,6 +220,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public void deleteCategoryInDB(Category selectedCategory) {
         int idAutre = Category.getIdAutre();
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        sqLiteManager.populateExpenseListArray(null,null);
 
         for (Expense expense : Expense.expenseMap.values()) {
             if (selectedCategory.getId() == expense.getCategory()) {

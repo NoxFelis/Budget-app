@@ -156,7 +156,7 @@ public class ExpenseEditActivity extends AppCompatActivity {
     }
 
     private void loadFromDBToMemory() {
-        CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this,true);
+        CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this);
         categoryManager.populateCategorySet(false);
     }
 
@@ -193,7 +193,7 @@ public class ExpenseEditActivity extends AppCompatActivity {
             });
             alertDialog.show();  //<-- See This!
         } else {
-            SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this,true);
+            SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
             String value = String.valueOf(editTextNumber.getText());
             int amount = (value.length() == 0) ? 0 : Math.round(Float.parseFloat(value)*100) ;
 
@@ -247,7 +247,7 @@ public class ExpenseEditActivity extends AppCompatActivity {
         alertDialog.setButton("Oui", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(getApplicationContext(),true);
+                SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(getApplicationContext());
                 sqLiteManager.deleteExpenseInDB(selectedExpense);
                 finish();
             }

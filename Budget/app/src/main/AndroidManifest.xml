@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -16,19 +16,25 @@
         android:theme="@style/Theme.Budget"
         tools:targetApi="31">
         <activity
-            android:name="nfelis.budget.CategoryActivity"
+            android:name=".SubscriptionEditActivity"
             android:exported="false" />
         <activity
-            android:name="nfelis.budget.CategoryEditActivity"
+            android:name=".SubscriptionActivity"
             android:exported="false" />
         <activity
-            android:name="nfelis.budget.SettingsActivity"
+            android:name=".CategoryActivity"
             android:exported="false" />
         <activity
-            android:name="nfelis.budget.ExpenseEditActivity"
+            android:name=".CategoryEditActivity"
             android:exported="false" />
         <activity
-            android:name="nfelis.budget.HomeActivity"
+            android:name=".SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ExpenseEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,13 +43,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="nfelis.budget.PeriodeActivity"
+            android:name=".PeriodeActivity"
             android:exported="false" />
         <activity
-            android:name="nfelis.budget.MoisActivity"
+            android:name=".MoisActivity"
             android:exported="false" />
         <activity
-            android:name="nfelis.budget.DetailActivity"
+            android:name=".DetailActivity"
             android:exported="false" />
     </application>
 
