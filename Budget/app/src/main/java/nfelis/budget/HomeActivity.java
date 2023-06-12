@@ -25,6 +25,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -34,7 +35,7 @@ import nfelis.budget.databinding.ActivityHomeBinding;
 public class HomeActivity extends MainActivity {
     private static final int REQUEST_CODE_FILE_CHOOSER = 1001;
     private static boolean isFirstLaunch;
-    private static String PREFS_NAME;
+    private static String PREFS_NAME,SUBSCRIPTION;
     private static final String PREF_FIRST_LAUNCH = "FirstLaunch";
     private PieChart pieChart;
     private LinkedHashMap<String,Integer> colors;
@@ -42,9 +43,10 @@ public class HomeActivity extends MainActivity {
     ActivityHomeBinding activityHomeBinding;
     private String startDate,endDate;
     private TextView valueRest, textArgent;
-    private int maxDepense;
+    private int maxDepense,subscriptionMonths,month;
     private ProgressBar resteBudget;
     private ListView budgetListView;
+    private SQLiteManager sqLiteManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +56,10 @@ public class HomeActivity extends MainActivity {
         allocateActivityTitle("Home");
 
         PREFS_NAME = getApplicationContext().getString(R.string.prefName);
+        SUBSCRIPTION = getApplicationContext().getString(R.string.subscriptions);
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         isFirstLaunch = preferences.getBoolean(PREF_FIRST_LAUNCH, true);
+        subscriptionMonths = preferences.getInt(SUBSCRIPTION,0);
 
         if (isFirstLaunch) {
             // Show the storage location dialog
@@ -71,13 +75,23 @@ public class HomeActivity extends MainActivity {
             loadFromDBToMemory();
             getMaxDepense();
         }
+
+        if (subscriptionMonths != month) {
+            spendSubscriptions();
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(SUBSCRIPTION, month);
+            editor.apply();
+            subscriptionMonths = month;
+        }
     }
+
+
 
     private void loadFromDBToMemory() {
         CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this);
         categoryManager.populateCategorySet(false);
 
-        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
+        sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.populateExpenseListArray(startDate,endDate);
     }
 
@@ -90,7 +104,7 @@ public class HomeActivity extends MainActivity {
     private void setDaysLimits() {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) +1;
+        month = cal.get(Calendar.MONTH) +1;
         List<String> days = Utils.setDateLimits(month,year);
         startDate = days.get(0);
         endDate = days.get(1);
@@ -244,6 +258,20 @@ public class HomeActivity extends MainActivity {
         loadFromDBToMemory();
         getMaxDepense();
         onResume();
+    }
+
+    private void spendSubscriptions() {
+        SubscriptionManager subscriptionManager = SubscriptionManager.instanceOfDatabase(this);
+        subscriptionManager.populateSubscriptionListArray();
+
+        Date date = new Date();
+        for (Subscription subscription : Subscription.subscriptionMap.values()) {
+            if (subscription.isActivated()) {
+                Expense expense = new Expense(0,subscription.getTitle(),subscription.getCategory(),subscription.getAmount(),date,false,false,false,false);
+                sqLiteManager.addExpenseToDatabase(expense);
+            }
+        }
+
     }
 
     @Override

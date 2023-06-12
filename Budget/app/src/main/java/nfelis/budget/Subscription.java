@@ -1,5 +1,7 @@
 package nfelis.budget;
 
+import androidx.annotation.NonNull;
+
 import java.util.Date;
 import java.util.LinkedHashMap;
 
@@ -65,5 +67,11 @@ public class Subscription {
                 return subscription;
         }
         return null;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.title + " " + this.activated;
     }
 }

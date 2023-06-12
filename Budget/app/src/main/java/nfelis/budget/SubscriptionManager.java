@@ -160,10 +160,10 @@ public class SubscriptionManager extends SQLiteOpenHelper  {
         }
     }
 
-    public void updateSubscriptionsInDB(HashMap<Integer, Subscription> selectedItems,int id) {
+    public void updateSubscriptionsInDB(HashMap<Integer, Subscription> selectedItems,int category) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         for (Subscription subscription : selectedItems.values()){
-            subscription.setCategory(id);
+            subscription.setCategory(category);
 
             ContentValues contentValues = new ContentValues();
             contentValues.put(ID_FIELD, subscription.getId());
@@ -195,5 +195,35 @@ public class SubscriptionManager extends SQLiteOpenHelper  {
     public void deleteDB(Context context) {
         context.deleteDatabase(path);
         subscriptionManager =null;
+    }
+
+    public void activationSubscriptionsInDB(HashMap<Integer, Subscription> selectedItems, boolean activated,Context context) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(context);
+        Date date = new Date();
+
+        for (Subscription subscription : selectedItems.values()){
+            boolean previous = subscription.isActivated();
+            subscription.setActivated(activated);
+
+            String title = subscription.getTitle();
+            int category = subscription.getCategory();
+            int amount = subscription.getAmount();
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ID_FIELD, subscription.getId());
+            contentValues.put(TITLE_FIELD, title);
+            contentValues.put(CATEGORY_FIELD,category);
+            contentValues.put(AMOUNT_FIELD,amount);
+            contentValues.put(ACTIVATED_FIELD,subscription.isActivated());
+
+            sqLiteDatabase.update(TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(subscription.getId())});
+            if (!previous && activated) {
+                Expense expense = new Expense(0,title,category,amount,date,false,false,false,false);
+                sqLiteManager.addExpenseToDatabase(expense);
+            }
+        }
+        sqLiteDatabase.close();
     }
 }

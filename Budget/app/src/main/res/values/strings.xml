@@ -35,6 +35,7 @@
     <string name="percentage">percentage</string>
     <string name="total">total</string>
     <string name="default_total">200</string>
+    <string name="subscriptions">subscriptions</string>
 
 
 </resources>

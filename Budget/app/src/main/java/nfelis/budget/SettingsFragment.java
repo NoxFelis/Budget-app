@@ -41,6 +41,7 @@ public class SettingsFragment extends PreferenceFragment {
         initWidgets();
         fillWidgets();
         setOnClickListeners();
+
     }
 
     private void initWidgets() {
@@ -113,8 +114,8 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void fillWidgets() {
-        String path = preferences.getString("storage_location", context.getString(R.string.default_storage));
-        folderPicker.setSummary(path);
+        String[] path = preferences.getString("storage_location", context.getString(R.string.default_storage)).split("/nfelis.budget");
+        folderPicker.setSummary(path[0]);
 
         boolean checked = preferences.getBoolean(PERCENTAGE,false);
         percentage.setChecked(checked);

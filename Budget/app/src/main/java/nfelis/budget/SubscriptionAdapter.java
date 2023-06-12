@@ -1,6 +1,7 @@
 package nfelis.budget;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,14 +32,16 @@ public class SubscriptionAdapter extends ArrayAdapter<Subscription> {
         TextView amount = convertView.findViewById(R.id.cellAmount);
         TextView cat = convertView.findViewById(R.id.cellCat);
 
-        title.setText(subscription.getTitle());
+        String name = subscription.getTitle();
+        title.setText(name);
         amount.setText(Utils.getStringFromAmount(subscription.getAmount())+"€");
         cat.setText(Category.getCategoryForID(subscription.getCategory()).getName());
-        if (subscription.isActivated()) {
+        if (!subscription.isActivated()) {
             title.setTextColor(gray);
             amount.setTextColor(gray);
             cat.setTextColor(gray);
         }
+        Log.d("COLOR", name + " " + String.valueOf(title.getCurrentTextColor()));
         return convertView;
     }
 

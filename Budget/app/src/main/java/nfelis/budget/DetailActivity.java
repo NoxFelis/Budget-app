@@ -71,8 +71,8 @@ public class DetailActivity extends MainActivity {
         changeButton = findViewById(R.id.changeButton);
         changeButton.setClickable(false);
         multipleChoiceButtons = findViewById(R.id.multipleChoiceButtons);
-        multipleChoiceButtons.setVisibility(View.GONE);
         isMultipleMode=false;
+        multipleChoiceButtons.setVisibility(View.GONE);
 
     }
     private void setExpenseAdapter()

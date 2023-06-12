@@ -78,12 +78,12 @@
             app:backgroundTint="@color/delftBlue_2"
             app:layout_constraintStart_toEndOf="@id/deleteButton"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/deactivate"
+            app:layout_constraintEnd_toStartOf="@id/deactivateButton"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/nav_category" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/deactivate"
+            android:id="@+id/deactivateButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -93,9 +93,24 @@
             app:backgroundTint="@color/delftBlue_2"
             app:layout_constraintStart_toEndOf="@id/changeButton"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/activateButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/deactivated"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/activateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:importantForAccessibility="no"
+            android:onClick="activate"
+            android:tint="@color/platinum"
+            app:backgroundTint="@color/delftBlue_2"
+            app:layout_constraintStart_toEndOf="@id/deactivateButton"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/subscription" />
+            app:srcCompat="@drawable/activated" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
