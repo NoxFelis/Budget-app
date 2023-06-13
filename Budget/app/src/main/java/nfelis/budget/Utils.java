@@ -212,43 +212,11 @@ public class Utils {
         //DocumentsContract.isDocumentUri(context.getApplicationContext(), uri)
         if (uri != null && needToCheckUri ) {
             if (isExternalStorageDocument(uri)) {
-                /*final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");*/
                 final String[] split = uri.getPath().split(":");
                 return Environment.getExternalStorageDirectory() + "/" + split[1]; // + "/" + split[1];
-            } /*else if (isDownloadsDocument(uri)) {
-                final String id = DocumentsContract.getDocumentId(uri);
-                uri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-            } else if (isMediaDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-                if ("image".equals(type)) {
-                    uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                }
-                selection = "_id=?";
-                selectionArgs = new String[]{ split[1] };
-            }*/
-        }
-        /*if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = { MediaStore.Images.Media.DATA };
-            Cursor cursor = null;
-            try {
-                cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                if (cursor.moveToFirst()) {
-                    return cursor.getString(column_index);
-                }
-            } catch (Exception e) {
             }
-        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }*/
+        }
+
         return "";
     }
 
@@ -302,6 +270,9 @@ public class Utils {
         SharedPreferences preferences = context.getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String oldPath = preferences.getString("storage_location", null);
 
+        SubscriptionManager oldSubs = SubscriptionManager.instanceOfDatabase(context);
+        oldSubs.populateSubscriptionListArray();
+        oldSubs.deleteDB(context);
         SQLiteManager old = SQLiteManager.instanceOfDatabase(context);
         old.populateExpenseListArray(null,null);
         old.deleteDB(context);
@@ -315,6 +286,8 @@ public class Utils {
         nouveau.fillDB();
         CategoryManager nouveauCategory = CategoryManager.instanceOfDatabase(context);
         nouveauCategory.fillDB();
+        SubscriptionManager nouveauSubs = SubscriptionManager.instanceOfDatabase(context);
+        nouveauSubs.fillDB();
 
         File file = new File(oldPath);
         boolean deleted = file.delete();
