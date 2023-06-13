@@ -26,7 +26,6 @@ import nfelis.budget.R;
 import nfelis.budget.databinding.ActivitySubscriptionBinding;
 
 public class SubscriptionActivity extends MainActivity {
-    private static final int REQUEST_CODE_EDIT_SUBSCRIPTION = 1;
     private ActivitySubscriptionBinding activitySubcriptionBinding;
     private ListView subscriptionListView;
     private CheckBox checkBox;
@@ -44,16 +43,13 @@ public class SubscriptionActivity extends MainActivity {
         allocateActivityTitle("Subscription");
 
         initWidgets();
-        setListener();
-        loadFromDBToMemory();
-
     }
 
     private void initWidgets() {
         subscriptionListView = findViewById(R.id.subscriptionListView);
 	    subscriptionListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+
         checkBox = findViewById(R.id.checkBox);
-        multipleChoiceButtons = findViewById(R.id.multipleChoiceButtons);
         deleteButton = findViewById(R.id.deleteButton);
         deleteButton.setClickable(false);
         changeButton = findViewById(R.id.changeButton);
@@ -62,6 +58,7 @@ public class SubscriptionActivity extends MainActivity {
         activateButton.setClickable(false);
         deactivateButton = findViewById(R.id.deactivateButton);
         deactivateButton.setClickable(false);
+        multipleChoiceButtons = findViewById(R.id.multipleChoiceButtons);
         isMultipleMode=false;
         multipleChoiceButtons.setVisibility(View.GONE);
     }
@@ -156,8 +153,10 @@ public class SubscriptionActivity extends MainActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        loadFromDBToMemory();
         Log.d("SubscriptionMap", String.valueOf(Subscription.subscriptionMap));
         setSubscriptionAdapter();
+        setListener();
     }
 
     public void deleteSubscriptions(View view) {

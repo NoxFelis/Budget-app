@@ -21,6 +21,7 @@ public class CategoryActivity extends MainActivity {
     private boolean percent;    // boolean to know if in percentage mode or not
     private String PREFS_NAME,PERCENTAGE;       // names of shared preference and access to element
     private int maxDepense;                     // value of total in budget
+    private CategoryAdapter adapter, adapterNon;
     ActivityCategoryBinding activityCategoryBinding;
 
     @Override
@@ -46,8 +47,7 @@ public class CategoryActivity extends MainActivity {
 
         initWidgets();
         setVisibility();
-        loadFromDBToMemory();
-        setOnClickListener();
+
     }
 
     private void initWidgets() {
@@ -71,14 +71,13 @@ public class CategoryActivity extends MainActivity {
     private void loadFromDBToMemory() {
         CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this);
         categoryManager.populateCategorySet(percent);
-
     }
 
     private void setCategoryAdapter() {
-        CategoryAdapter adapter = new CategoryAdapter(getApplicationContext(), new ArrayList<Category>(Category.categoryMap.values()));
+        adapter = new CategoryAdapter(getApplicationContext(), new ArrayList<Category>(Category.categoryMap.values()));
         categoryListView.setAdapter(adapter);
         if (percent) {
-            CategoryAdapter adapterNon = new CategoryAdapter(getApplicationContext(), new ArrayList<Category>(Category.categoryNonMap.values()));
+            adapterNon = new CategoryAdapter(getApplicationContext(), new ArrayList<Category>(Category.categoryNonMap.values()));
             categoryNonListView.setAdapter(adapterNon);
         }
 
@@ -109,13 +108,15 @@ public class CategoryActivity extends MainActivity {
 
 
     public void newCategory(View view){
-        Intent newCategoryIntent = new Intent(this, CategoryEditActivity.class);
+        Intent newCategoryIntent = new Intent(getApplicationContext(), CategoryEditActivity.class);
         startActivity(newCategoryIntent);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        loadFromDBToMemory();
         setCategoryAdapter();
+        setOnClickListener();
     }
 }

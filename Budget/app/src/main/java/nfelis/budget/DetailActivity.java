@@ -40,7 +40,7 @@ public class DetailActivity extends MainActivity {
     private boolean isMultipleMode;
     private ConstraintLayout multipleChoiceButtons;
     private ExpenseAdapter expenseAdapter;
-    private FloatingActionButton deleteButton,changeButton;
+    private FloatingActionButton deleteButton,changeButton,rembourseButton;
     private HashMap<Integer,Expense> selectedItems;     // with the integer the position in the list view
     @SuppressLint("SimpleDateFormat")
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

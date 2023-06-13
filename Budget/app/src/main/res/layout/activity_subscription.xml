@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,18 +7,26 @@
     tools:context=".SubscriptionActivity"
     android:id="@+id/nav_subscription"
     android:orientation="vertical"
-    android:background="@color/delftBlue">
+    android:background="@color/delftBlue"
+    android:gravity="end">
 
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="setMultiple"
-        android:text="selection"
-        android:textColor="@color/platinum"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/subscriptionListView"/>
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="setMultiple"
+            android:text="selection"
+            android:textColor="@color/platinum"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/subscriptionListView"/>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/subscriptionListView"
@@ -27,9 +35,7 @@
         android:layout_marginTop="3dp"
         android:dividerHeight="3dp"
         android:divider="@color/delftBlue"
-        android:layout_weight="1"
-        app:layout_constraintTop_toBottomOf="@id/checkBox"
-        app:layout_constraintBottom_toTopOf="@id/addSubscriptionButton"/>
+        android:layout_weight="1" />
 
     <Button
         android:id="@+id/addSubscriptionButton"
@@ -49,8 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/multipleChoiceButtons"
-        android:padding="3dp"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:padding="3dp">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/deleteButton"
@@ -111,7 +116,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/activated" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

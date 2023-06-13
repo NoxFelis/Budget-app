@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Switch;
@@ -47,6 +48,7 @@ public class CategoryEditActivity extends AppCompatActivity {
 
         initWidgets();
         checkForEditCategory();
+        setOnListeners();
     }
 
     private void initWidgets() {
@@ -70,6 +72,30 @@ public class CategoryEditActivity extends AppCompatActivity {
             amountButton.setVisibility(View.GONE);
             amountEdit.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void setOnListeners() {
+        switchInBudget.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                boolean button = percent && switchInBudget.isChecked();
+                setVisibility(button);
+                if (button) {
+                    if (selectedCategory == null) {
+                        String value = String.valueOf(amountEdit.getText());
+                        int amount = (value.length() == 0) ? 0 : Integer.parseInt(value);
+                        amountButton.setText(String.valueOf(amount));
+                    } else {
+                        amountButton.setText("0");
+                    }
+
+                } else {
+                    int value = Integer.parseInt(String.valueOf(amountButton.getText()));
+                    int amount = Math.round((float) value*maxDepense/100);
+                    amountEdit.setText(String.valueOf(amount));
+                }
+            }
+        });
     }
 
     private void checkForEditCategory() {
@@ -106,69 +132,16 @@ public class CategoryEditActivity extends AppCompatActivity {
     }
 
     public void saveCategory(View view) {
+        // open database and first elements
         CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this);
-        String name = String.valueOf(nameEdit.getText()).trim();
-        boolean previous = selectedCategory.isInBudget();
-
-        int amount;
-        if (percent && previous) {
-            int value = Integer.parseInt(String.valueOf(amountButton.getText()));
-            amount = Math.round((float) value*maxDepense/100);
-        } else {
-            String value = String.valueOf(amountEdit.getText());
-            amount = (value.length() == 0) ? 0 : Integer.parseInt(value);
-        }
         boolean checked = switchInBudget.isChecked();
         boolean visible = switchVisible.isChecked();
-        String color = Utils.returnHEX(String.valueOf(colorEdit.getText()));
+        int amount;
 
+        // first test, if the color is correct
+        String color = Utils.returnHEX(String.valueOf(colorEdit.getText()));
         try{
             Color.parseColor(color);
-            if (selectedCategory == null) {
-                if (name.compareTo("") == 0) {
-                    AlertDialog alertDialog = new AlertDialog.Builder(this).create(); //Read Update
-                    alertDialog.setTitle("Nom vide");
-                    alertDialog.setMessage("Vous ne pouvez pas créer de catégorie sans titre!");
-
-                    alertDialog.setButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            alertDialog.dismiss();
-                        }
-                    });
-                    alertDialog.show();  //<-- See This
-                } else {
-                    Category category = new Category(0, name, amount, color, visible, checked);
-                    categoryManager.addCategoryToDatabase(category);
-                    if (percent && !checked) {
-                        Category.categoryNonMap.put(category.getId(),category);
-                    } else {
-                        Category.categoryMap.put(category.getId(), category);
-                    }
-                }
-            } else {
-
-                selectedCategory.setAmount(amount);
-                selectedCategory.setColor(color);
-                selectedCategory.setVisible(visible);
-                selectedCategory.setInBudget(checked);
-                int id = selectedCategory.getId();
-                if (percent && !checked) {
-                    categoryManager.updateCategoryInDB(selectedCategory);
-                    Category.categoryNonMap.put(id,selectedCategory);
-                    if (previous) {
-                        Category.categoryMap.remove(id);
-                    }
-                } else {
-                    Category.categoryMap.put(id,selectedCategory);
-                    if (percent && !previous) {
-                        selectedCategory.setAmount(0);
-                        Category.categoryNonMap.remove(id);
-                    }
-                    categoryManager.updateCategoryInDB(selectedCategory);
-                }
-
-            }
-            finish();
         } catch (IllegalArgumentException e) {
             AlertDialog alertDialog = new AlertDialog.Builder(this).create(); //Read Update
             alertDialog.setTitle("Couleur invalide");
@@ -180,6 +153,75 @@ public class CategoryEditActivity extends AppCompatActivity {
             });
             alertDialog.show();  //<-- See This
         }
+
+
+        if (selectedCategory == null) {
+            // second test is if the name is not empty
+            String name = String.valueOf(nameEdit.getText()).trim();
+            if (name.compareTo("") == 0) {
+                AlertDialog alertDialog = new AlertDialog.Builder(this).create(); //Read Update
+                alertDialog.setTitle("Nom vide");
+                alertDialog.setMessage("Vous ne pouvez pas créer de catégorie sans titre!");
+
+                alertDialog.setButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog.dismiss();
+                    }
+                });
+                alertDialog.show();  //<-- See This
+            }
+
+            // now we check what the amount is
+            if (percent && checked) {
+                int value = Integer.parseInt(String.valueOf(amountButton.getText()));
+                amount = Math.round((float) value*maxDepense/100);
+            } else {
+                String value = String.valueOf(amountEdit.getText());
+                amount = (value.length() == 0) ? 0 : Integer.parseInt(value);
+            }
+
+            Category category = new Category(0, name, amount, color, visible, checked);
+            categoryManager.addCategoryToDatabase(category);
+            if (percent && !checked) {
+                Category.categoryNonMap.put(category.getId(), category);
+            } else {
+                Category.categoryMap.put(category.getId(), category);
+            }
+        } else {
+
+            boolean previous = selectedCategory.isInBudget();
+
+            if (percent && previous) {
+                int value = Integer.parseInt(String.valueOf(amountButton.getText()));
+                amount = Math.round((float) value*maxDepense/100);
+            } else {
+                String value = String.valueOf(amountEdit.getText());
+                amount = (value.length() == 0) ? 0 : Integer.parseInt(value);
+            }
+
+            selectedCategory.setAmount(amount);
+            selectedCategory.setColor(color);
+            selectedCategory.setVisible(visible);
+            selectedCategory.setInBudget(checked);
+            int id = selectedCategory.getId();
+            if (percent && !checked) {
+                categoryManager.updateCategoryInDB(selectedCategory);
+                Category.categoryNonMap.put(id, selectedCategory);
+                if (previous) {
+                    Category.categoryMap.remove(id);
+                }
+            } else {
+                Category.categoryMap.put(id, selectedCategory);
+                if (percent && !previous) {
+                    selectedCategory.setAmount(0);
+                    Category.categoryNonMap.remove(id);
+                }
+                categoryManager.updateCategoryInDB(selectedCategory);
+            }
+
+        }
+        finish();
+
     }
 
 
@@ -235,8 +277,13 @@ public class CategoryEditActivity extends AppCompatActivity {
         View dialogView = getLayoutInflater().inflate(R.layout.dialogue_percentage_picker, null);
         NumberPicker percentagePicker = dialogView.findViewById(R.id.percentagePicker);
         percentagePicker.setMinValue(0);
-        percentagePicker.setMaxValue(Utils.getResteDepense(context,selectedCategory.getId()));
-        percentagePicker.setValue(Utils.getPercentage(context,selectedCategory.getAmount()));
+        if (selectedCategory == null) {
+            percentagePicker.setMaxValue(Utils.getResteDepense(context,-1));
+            percentagePicker.setValue(Utils.getPercentage(context,0));
+        } else {
+            percentagePicker.setMaxValue(Utils.getResteDepense(context,selectedCategory.getId()));
+            percentagePicker.setValue(Utils.getPercentage(context,Integer.parseInt(String.valueOf(amountButton.getText()))));
+        }
         percentagePicker.setWrapSelectorWheel(false); // To block scrolling beyond min/max values
 
         builder.setTitle("Select Percentage")
