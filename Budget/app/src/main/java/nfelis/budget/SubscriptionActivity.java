@@ -19,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class SubscriptionActivity extends MainActivity {
     private HashMap<Integer,Subscription> selectedItems;
     private SubscriptionAdapter subscriptionAdapter;
     private FloatingActionButton deleteButton,changeButton,deactivateButton,activateButton;
+    private int currentMonth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class SubscriptionActivity extends MainActivity {
         allocateActivityTitle("Subscription");
 
         initWidgets();
+        getTodaysMonth();
     }
 
     private void initWidgets() {
@@ -61,6 +64,11 @@ public class SubscriptionActivity extends MainActivity {
         multipleChoiceButtons = findViewById(R.id.multipleChoiceButtons);
         isMultipleMode=false;
         multipleChoiceButtons.setVisibility(View.GONE);
+    }
+
+    private void getTodaysMonth() {
+        Calendar cal = Calendar.getInstance();
+        currentMonth = cal.get(Calendar.MONTH) +1;
     }
 
     private void setListener() {
@@ -230,7 +238,7 @@ public class SubscriptionActivity extends MainActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 SubscriptionManager subscriptionManager = SubscriptionManager.instanceOfDatabase(view.getContext());
-                subscriptionManager.activationSubscriptionsInDB(selectedItems,true,getApplicationContext());
+                subscriptionManager.activationSubscriptionsInDB(selectedItems,true,getApplicationContext(),currentMonth);
                 selectedItems.clear();
                 alertDialog.dismiss();
                 setMultiple(false);
@@ -256,7 +264,7 @@ public class SubscriptionActivity extends MainActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 SubscriptionManager subscriptionManager = SubscriptionManager.instanceOfDatabase(view.getContext());
-                subscriptionManager.activationSubscriptionsInDB(selectedItems,false,getApplicationContext());
+                subscriptionManager.activationSubscriptionsInDB(selectedItems,false,getApplicationContext(),currentMonth);
                 selectedItems.clear();
                 alertDialog.dismiss();
                 setMultiple(false);

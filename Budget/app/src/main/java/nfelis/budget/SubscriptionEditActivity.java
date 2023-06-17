@@ -25,6 +25,7 @@ public class SubscriptionEditActivity extends AppCompatActivity {
     private FloatingActionButton deleteButton;
     private Subscription selectedSubscription;
     private CategoryAdapter categoryAdapter;
+    private int currentMonth;
 
 
     @Override
@@ -33,6 +34,7 @@ public class SubscriptionEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_subscription_edit);
 
         initWidgets();
+        getTodaysMonth();
         setListeners();
         loadFromDBToMemory();
         setAdapter();
@@ -46,6 +48,11 @@ public class SubscriptionEditActivity extends AppCompatActivity {
         switchActivated = findViewById(R.id.switchActivated);
 
         deleteButton = findViewById(R.id.deleteButton);
+    }
+
+    private void getTodaysMonth() {
+        Calendar cal = Calendar.getInstance();
+        currentMonth = cal.get(Calendar.MONTH) +1;
     }
 
     private void setListeners() {
@@ -83,6 +90,7 @@ public class SubscriptionEditActivity extends AppCompatActivity {
 
     public void saveSubscription(View view)
     {
+        // On ne sauvegarde pas si le titre est vide
         String title = String.valueOf(titreEditText.getText()).trim();
         if (title.compareTo("")==0) {
             AlertDialog alertDialog = new AlertDialog.Builder(this).create(); //Read Update
@@ -103,8 +111,10 @@ public class SubscriptionEditActivity extends AppCompatActivity {
             int category = ((Category) categorySpinner.getSelectedItem()).getId();
             boolean activated = switchActivated.isChecked();
 
+            // si c'est une nouvelle subscription
             if(selectedSubscription == null)
             {
+
                 Subscription newSubscription = new Subscription(0, title,category,amount,activated);
                 subscriptionManager.addSubscriptionToDatabase(newSubscription);
                 Subscription.subscriptionMap.put(newSubscription.getId(),newSubscription);
@@ -115,6 +125,7 @@ public class SubscriptionEditActivity extends AppCompatActivity {
                     Expense newExpense = new Expense(0,title,category,amount,date,false,false,false,false);
                     SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
                     sqLiteManager.addExpenseToDatabase(newExpense);
+                    newSubscription.setMonth(currentMonth);
                 }
             }
             else
@@ -128,11 +139,12 @@ public class SubscriptionEditActivity extends AppCompatActivity {
                 subscriptionManager.updateSubscriptionInDB(selectedSubscription);
                 Subscription.subscriptionMap.put(selectedSubscription.getId(),selectedSubscription);
                 // HomeActivity.updateValue(selectedExpense,oldValue);
-                if (!previous && activated) {
+                if (!previous && activated && selectedSubscription.getMonth() != currentMonth) {
                     Date date = new Date();
                     Expense newExpense = new Expense(0,title,category,amount,date,false,false,false,false);
                     SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
                     sqLiteManager.addExpenseToDatabase(newExpense);
+                    selectedSubscription.setMonth(currentMonth);
                 }
             }
             finish();

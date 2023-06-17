@@ -17,12 +17,23 @@ public class Subscription {
     private int category;    // id de la catégorie de la dépense (santé, loisir, alimentaire, etc.)
     private int amount;         // valeur de la dépense, elle sera stockée en entiers
     private boolean activated;  // si on utilise cet abonnement
+    private int month;          // dernière date de la dépense associée, à -1 si la dépense n'a jamais été faite
     public Subscription(int id, String title, int category, int amount,boolean activated) {
         this.id = id;
         this.title = title;
         this.category = category;
         this.amount = amount;
         this.activated = activated;
+        this.month = -1;
+    }
+
+    public Subscription(int id, String title, int category, int amount,boolean activated, int month) {
+        this.id = id;
+        this.title = title;
+        this.category = category;
+        this.amount = amount;
+        this.activated = activated;
+        this.month = month;
     }
 
     public int getId() {
@@ -59,6 +70,8 @@ public class Subscription {
 
     public boolean isActivated() {return activated;}
     public void setActivated(boolean activated) {this.activated = activated;}
+    public int getMonth() { return  this.month;}
+    public void setMonth(int month) {this.month = month;}
 
     public static Subscription getSubscriptionForID(int passedSubscriptionID) {
         for (Subscription subscription : subscriptionMap.values())

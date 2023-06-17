@@ -23,6 +23,7 @@ public class SubscriptionManager extends SQLiteOpenHelper  {
     private static final String AMOUNT_FIELD = "amount";
     private static final String CATEGORY_FIELD = "category";
     private static final String ACTIVATED_FIELD = "activated";
+    private static final String MONTH_FIELD = "month";
     private static int number_subscription;
 
     public SubscriptionManager(Context context)
@@ -58,6 +59,8 @@ public class SubscriptionManager extends SQLiteOpenHelper  {
                 .append(CATEGORY_FIELD)
                 .append(" INT, ")
                 .append(ACTIVATED_FIELD)
+                .append(" INT, ")
+                .append(MONTH_FIELD)
                 .append(" INT)");
         sqLiteDatabase.execSQL(sql.toString());
 
@@ -79,6 +82,7 @@ public class SubscriptionManager extends SQLiteOpenHelper  {
         contentValues.put(CATEGORY_FIELD,subscription.getCategory());
         contentValues.put(AMOUNT_FIELD,subscription.getAmount());
         contentValues.put(ACTIVATED_FIELD,subscription.isActivated());
+        contentValues.put(MONTH_FIELD,subscription.getMonth());
 
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
         sqLiteDatabase.close();
@@ -99,8 +103,9 @@ public class SubscriptionManager extends SQLiteOpenHelper  {
                     int amount = result.getInt(3);
                     int category = result.getInt(4);
                     boolean activated = result.getInt(5) == 1;
+                    int month = result.getInt(6);
                     number_subscription = Math.max(number_subscription,id);
-                    Subscription subscription = new Subscription(id,title,category,amount,activated);
+                    Subscription subscription = new Subscription(id,title,category,amount,activated,month);
                     Subscription.subscriptionMap.put(id,subscription);
                 }
             }
@@ -118,6 +123,7 @@ public class SubscriptionManager extends SQLiteOpenHelper  {
         contentValues.put(CATEGORY_FIELD,subscription.getCategory());
         contentValues.put(AMOUNT_FIELD,subscription.getAmount());
         contentValues.put(ACTIVATED_FIELD,subscription.isActivated());
+        contentValues.put(MONTH_FIELD,subscription.getMonth());
 
         sqLiteDatabase.update(TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(subscription.getId())});
         sqLiteDatabase.close();
@@ -154,6 +160,7 @@ public class SubscriptionManager extends SQLiteOpenHelper  {
                 contentValues.put(CATEGORY_FIELD,subscription.getCategory());
                 contentValues.put(AMOUNT_FIELD,subscription.getAmount());
                 contentValues.put(ACTIVATED_FIELD,subscription.isActivated());
+                contentValues.put(MONTH_FIELD,subscription.getMonth());
 
                 sqLiteDatabase.update(TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(subscription.getId())});
             }
@@ -171,6 +178,7 @@ public class SubscriptionManager extends SQLiteOpenHelper  {
             contentValues.put(CATEGORY_FIELD,subscription.getCategory());
             contentValues.put(AMOUNT_FIELD,subscription.getAmount());
             contentValues.put(ACTIVATED_FIELD,subscription.isActivated());
+            contentValues.put(MONTH_FIELD,subscription.getMonth());
 
             sqLiteDatabase.update(TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(subscription.getId())});
         }
@@ -186,6 +194,7 @@ public class SubscriptionManager extends SQLiteOpenHelper  {
             contentValues.put(CATEGORY_FIELD,subscription.getCategory());
             contentValues.put(AMOUNT_FIELD,subscription.getAmount());
             contentValues.put(ACTIVATED_FIELD,subscription.isActivated());
+            contentValues.put(MONTH_FIELD,subscription.getMonth());
 
             sqLiteDatabase.update(TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(subscription.getId())});
         }
@@ -197,7 +206,7 @@ public class SubscriptionManager extends SQLiteOpenHelper  {
         subscriptionManager =null;
     }
 
-    public void activationSubscriptionsInDB(HashMap<Integer, Subscription> selectedItems, boolean activated,Context context) {
+    public void activationSubscriptionsInDB(HashMap<Integer, Subscription> selectedItems, boolean activated,Context context,int month) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(context);
@@ -218,11 +227,14 @@ public class SubscriptionManager extends SQLiteOpenHelper  {
             contentValues.put(AMOUNT_FIELD,amount);
             contentValues.put(ACTIVATED_FIELD,subscription.isActivated());
 
-            sqLiteDatabase.update(TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(subscription.getId())});
-            if (!previous && activated) {
+            if (!previous && activated && month != subscription.getMonth()) {
                 Expense expense = new Expense(0,title,category,amount,date,false,false,false,false);
                 sqLiteManager.addExpenseToDatabase(expense);
+                subscription.setMonth(month);
             }
+            contentValues.put(MONTH_FIELD,subscription.getMonth());
+            sqLiteDatabase.update(TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(subscription.getId())});
+
         }
         sqLiteDatabase.close();
     }
