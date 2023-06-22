@@ -318,4 +318,64 @@ public class Utils {
         int maxDepense = preferences.getInt(context.getString(R.string.total),Integer.parseInt(context.getString(R.string.default_total)));
         return Math.round(((float) amount/maxDepense)*100);
     }
+
+    public static CharSequence getCash(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.prefName),MODE_PRIVATE);
+        int cash = preferences.getInt(context.getString(R.string.cash),0);
+        int cash_euro = Math.round(((float) cash)/100);
+        int cash_cent = cash - cash_euro*100;
+        return cash_euro + "." + cash_cent + "€";
+    }
+
+    public static void spendCash(Context context,Expense selectedExpense, int previousValue) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.prefName),MODE_PRIVATE);
+        String cashLocation = context.getString(R.string.cash);
+        int cash = preferences.getInt(cashLocation,0);
+        int value = selectedExpense.getAmount();
+        if (selectedExpense.isCash()) {
+            cash += (-value + previousValue);
+        } else if (selectedExpense.isRembourseCash()) {
+            cash += value;
+        } else if (selectedExpense.isRetrait()) {
+            cash += value;
+        }
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(cashLocation, cash);
+        editor.apply();
+    }
+
+    public static void getCash(Context context, Expense expense) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.prefName),MODE_PRIVATE);
+        String cashLocation = context.getString(R.string.cash);
+        int cash = preferences.getInt(cashLocation,0);
+        int amount = expense.getAmount();
+
+        if (expense.isCash()) {
+            cash += amount;
+        } else if (expense.isRetrait()) {
+            cash += (-amount);
+        } else if (!expense.isCash() && expense.isRembourseCash()) {
+            cash += (-amount);
+        }
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(cashLocation, cash);
+        editor.apply();
+    }
+
+    public static void rembourseCash(Context context, Expense expense) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.prefName),MODE_PRIVATE);
+        String cashLocation = context.getString(R.string.cash);
+        int cash = preferences.getInt(cashLocation,0);
+        int amount = expense.getAmount();
+
+        if (expense.isRembourseCash()) {
+            cash += amount;
+        }
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(cashLocation, cash);
+        editor.apply();
+    }
 }

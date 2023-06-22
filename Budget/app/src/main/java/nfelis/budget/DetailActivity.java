@@ -213,6 +213,9 @@ public class DetailActivity extends MainActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(view.getContext());
                 sqLiteManager.deleteExpensesInDB(selectedItems);
+                for (Expense expense : selectedItems.values()) {
+                    Utils.getCash(getApplicationContext(),expense);
+                }
                 selectedItems.clear();
                 alertDialog.dismiss();
                 setMultiple(false);
@@ -271,6 +274,9 @@ public class DetailActivity extends MainActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 SQLiteManager expenseManager = SQLiteManager.instanceOfDatabase(getApplicationContext());
                 expenseManager.rembourseExpensesInDB(selectedItems,true);
+                for (Expense expense: selectedItems.values()) {
+                    Utils.rembourseCash(getApplicationContext(),expense);
+                }
                 alertDialog.dismiss();
                 expenseAdapter.notifyDataSetChanged();
                 setMultiple(false);

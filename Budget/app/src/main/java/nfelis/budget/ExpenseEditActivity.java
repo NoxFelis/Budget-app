@@ -209,12 +209,14 @@ public class ExpenseEditActivity extends AppCompatActivity {
 
                 sqLiteManager.addExpenseToDatabase(newExpense);
                 if (datefull == dateToday) {
-                    Expense.expenseMap.put(selectedExpense.getId(),selectedExpense);
+                    Expense.expenseMap.put(newExpense.getId(),newExpense);
                 }
+                Utils.spendCash(getApplicationContext(),newExpense,0);
                 //HomeActivity.updateValue(selectedExpense,0);
             }
             else
             {
+                int previousValue = selectedExpense.getAmount();
                 selectedExpense.setTitle(title);
                 selectedExpense.setAmount(amount);
                 selectedExpense.setCash(cash);
@@ -227,6 +229,7 @@ public class ExpenseEditActivity extends AppCompatActivity {
                 if (datefull == dateToday) {
                     Expense.expenseMap.put(selectedExpense.getId(),selectedExpense);
                 }
+                Utils.spendCash(getApplicationContext(),selectedExpense,previousValue);
                // HomeActivity.updateValue(selectedExpense,oldValue);
             }
             finish();
@@ -249,6 +252,7 @@ public class ExpenseEditActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(getApplicationContext());
                 sqLiteManager.deleteExpenseInDB(selectedExpense);
+                Utils.getCash(getApplicationContext(),selectedExpense);
                 finish();
             }
         });

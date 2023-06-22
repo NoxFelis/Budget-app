@@ -34,15 +34,15 @@ import nfelis.budget.databinding.ActivityHomeBinding;
 
 public class HomeActivity extends MainActivity {
     private static final int REQUEST_CODE_FILE_CHOOSER = 1001;
-    private static boolean isFirstLaunch;
-    private static String PREFS_NAME,SUBSCRIPTION;
+    private static boolean isFirstLaunch,visualCash;
+    private static String PREFS_NAME,SUBSCRIPTION,CASHVISIBLE;
     private static final String PREF_FIRST_LAUNCH = "FirstLaunch";
     private PieChart pieChart;
     private LinkedHashMap<String,Integer> colors;
     private LinkedHashMap<String,PieEntry> pieEntryMap;
     ActivityHomeBinding activityHomeBinding;
     private String startDate,endDate;
-    private TextView valueRest, textArgent;
+    private TextView valueRest, textArgent,textCash,cashValue;
     private int maxDepense,subscriptionMonths,month;
     private ProgressBar resteBudget;
     private ListView budgetListView;
@@ -56,10 +56,10 @@ public class HomeActivity extends MainActivity {
         allocateActivityTitle("Home");
 
         PREFS_NAME = getApplicationContext().getString(R.string.prefName);
-        SUBSCRIPTION = getApplicationContext().getString(R.string.subscriptions);
+        CASHVISIBLE = getApplicationContext().getString(R.string.cashVisible);
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         isFirstLaunch = preferences.getBoolean(PREF_FIRST_LAUNCH, true);
-        subscriptionMonths = preferences.getInt(SUBSCRIPTION,0);
+        visualCash = preferences.getBoolean(CASHVISIBLE,false);
 
         if (isFirstLaunch) {
             // Show the storage location dialog
@@ -71,18 +71,15 @@ public class HomeActivity extends MainActivity {
             editor.apply();
         } else {
             initWidgets();
+            setVisibility();
             setDaysLimits();
             loadFromDBToMemory();
             getMaxDepense();
         }
 
-        if (subscriptionMonths != month) {
-            spendSubscriptions();
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putInt(SUBSCRIPTION, month);
-            editor.apply();
-            subscriptionMonths = month;
-        }
+
+        spendSubscriptions();
+
     }
 
 
@@ -124,9 +121,24 @@ public class HomeActivity extends MainActivity {
         resteBudget = findViewById(R.id.resteBudget);
         textArgent = findViewById(R.id.textArgent);
         budgetListView = findViewById(R.id.budgetListView);
+        textCash = findViewById(R.id.textCash);
+        cashValue = findViewById(R.id.cashValue);
+
+    }
+
+    private void setVisibility() {
+        if (visualCash) {
+            textCash.setVisibility(View.VISIBLE);
+            cashValue.setVisibility(View.VISIBLE);
+            cashValue.setText(Utils.getCash(getApplicationContext()));
+        } else {
+            textCash.setVisibility(View.GONE);
+            cashValue.setVisibility(View.GONE);
+        }
     }
 
     public void newExpense(View view)
+
     {
         Intent newExpenseIntent = new Intent(this, ExpenseEditActivity.class);
         startActivity(newExpenseIntent);
@@ -254,6 +266,7 @@ public class HomeActivity extends MainActivity {
 
         }
         initWidgets();
+        setVisibility();
         setDaysLimits();
         loadFromDBToMemory();
         getMaxDepense();
@@ -266,9 +279,10 @@ public class HomeActivity extends MainActivity {
 
         Date date = new Date();
         for (Subscription subscription : Subscription.subscriptionMap.values()) {
-            if (subscription.isActivated()) {
+            if (subscription.isActivated() && subscription.getMonth() != month) {
                 Expense expense = new Expense(0,subscription.getTitle(),subscription.getCategory(),subscription.getAmount(),date,false,false,false,false);
                 sqLiteManager.addExpenseToDatabase(expense);
+                subscription.setMonth(month);
             }
         }
 

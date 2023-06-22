@@ -28,9 +28,9 @@ import java.net.URISyntaxException;
 
 public class SettingsFragment extends PreferenceFragment {
     private static final int REQUEST_CODE_FILE_CHOOSER = 1001;
-    private static String PREFS_NAME, PERCENTAGE;
+    private static String PREFS_NAME, PERCENTAGE,CASHVISIBLE;
     Preference folderPicker;
-    SwitchPreference percentage;
+    SwitchPreference percentage,cashVisible;
     EditTextPreference total;
     Context context;
     private static SharedPreferences preferences;
@@ -48,10 +48,12 @@ public class SettingsFragment extends PreferenceFragment {
         context = getContext();
         PREFS_NAME = context.getString(R.string.prefName);
         PERCENTAGE = context.getString(R.string.percentage);
+        CASHVISIBLE = context.getString(R.string.cashVisible);
 
         folderPicker = (Preference) findPreference("folderPicker");
         percentage = (SwitchPreference) findPreference(PERCENTAGE);
         total = (EditTextPreference) findPreference(context.getString(R.string.total));
+        cashVisible = (SwitchPreference) findPreference(CASHVISIBLE);
 
         preferences = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
     }
@@ -111,6 +113,17 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
+
+        cashVisible.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+                boolean checked = (boolean) newValue;
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(CASHVISIBLE,checked);
+                editor.apply();
+                return true;
+            }
+        });
     }
 
     private void fillWidgets() {
@@ -120,6 +133,8 @@ public class SettingsFragment extends PreferenceFragment {
         boolean checked = preferences.getBoolean(PERCENTAGE,false);
         percentage.setChecked(checked);
         total.setEnabled(checked);
+
+        cashVisible.setChecked(preferences.getBoolean(CASHVISIBLE,false));
     }
 
     @Override

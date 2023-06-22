@@ -66,6 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginBottom="5dp"
             android:text="Argent restant :"
             android:textColor="@color/mintGreen"
             android:textSize="16sp"
@@ -77,6 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginBottom="5dp"
             android:text="@string/reste"
             android:textColor="@color/mintGreen"
             android:textSize="16sp"
@@ -85,6 +87,34 @@
             app:layout_constraintStart_toEndOf="@+id/textArgent" />
         <!-- end progressbar reste -->
 
+
+        <!-- beginning cash value -->
+        <TextView
+            android:id="@+id/textCash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/textCash"
+            android:textColor="@color/platinum"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/valueRest"
+            app:layout_constraintBottom_toTopOf="@id/resteBudget"/>
+
+        <TextView
+            android:id="@+id/cashValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/cashValue"
+            android:textColor="@color/platinum"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/textCash"
+            app:layout_constraintBottom_toTopOf="@id/resteBudget"/>
+        <!-- end cash value -->
 
         <!--Beginning of button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton

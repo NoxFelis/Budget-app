@@ -78,6 +78,7 @@ public class CategoryEditActivity extends AppCompatActivity {
         switchInBudget.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                //if we're in percentage mode and we checked the budget button
                 boolean button = percent && switchInBudget.isChecked();
                 setVisibility(button);
                 if (button) {
@@ -89,10 +90,13 @@ public class CategoryEditActivity extends AppCompatActivity {
                         amountButton.setText("0");
                     }
 
-                } else {
-                    int value = Integer.parseInt(String.valueOf(amountButton.getText()));
-                    int amount = Math.round((float) value*maxDepense/100);
-                    amountEdit.setText(String.valueOf(amount));
+                } else {    //if we're not in percentage mode or the budget switch is unchecked
+
+                    if (percent) {
+                        int value = Integer.parseInt(String.valueOf(amountButton.getText()));
+                        int amount = Math.round((float) value*maxDepense/100);
+                        amountEdit.setText(String.valueOf(amount));
+                    }
                 }
             }
         });
