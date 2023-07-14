@@ -24,11 +24,20 @@ public class CategoryManager extends SQLiteOpenHelper {
     private static final String VISIBLE_FIELD = "visible";
     private static final String BUDGET_FIELD = "inBudget";
     private static int number_categories;
+
+    /** Constructor of the categoryManager
+     * */
     public CategoryManager(Context context)
     {
         super(context, DATABASE_CATEGORIES, null, DATABASE_VERSION);
 
     }
+
+    /** this is actually called instead of the constructor. It avoids creating multiple instances of the manager
+     *
+     * @param context context of the application
+     * @return returns a new instance of the categoryManager unless one is already existing and then returns that one
+     */
     public static CategoryManager instanceOfDatabase(Context context)
     {
         PREFS_NAME = context.getString(R.string.prefName);
@@ -107,6 +116,10 @@ public class CategoryManager extends SQLiteOpenHelper {
         //onCreate(sqLiteDatabase);
     }
 
+
+    /** Adds a single category to the database, based on a Category object
+     * @param newCategory the new category we wish to add to the database
+     * */
     public void addCategoryToDatabase(Category newCategory) {
         //il faudra check c'est la bonne db
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
@@ -124,6 +137,12 @@ public class CategoryManager extends SQLiteOpenHelper {
         sqLiteDatabase.close();
 
     }
+
+    /** Fills the category maps depending on if we are working in percentage mode or not
+     *
+     * @param percent true if we are in percentage mode. In which case, two maps are used depending
+     *                if the category is in the budget or not
+     */
     public void populateCategorySet(boolean percent) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         Category.categoryMap.clear();
@@ -154,13 +173,21 @@ public class CategoryManager extends SQLiteOpenHelper {
         }
         sqLiteDatabase.close();
     }
+
+    /** Deletes a category in the database and the category map
+     * @param category the object we wish to delete*/
     public void deleteCategoryInDB(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME, ID_FIELD +  "= ?", new String[]{String.valueOf(category.getId())});
         db.close();
-        Category.categoryMap.remove(category.getName());
+        Category.categoryMap.remove(category.getId());
+        Category.categoryNonMap.remove(category.getId());
     }
 
+    /** Updates the category in the database based on the id
+     *
+     * @param category the category with its new parameters
+     */
     public void updateCategoryInDB(Category category) {
         SQLiteDatabase categoryDatabase = this.getWritableDatabase();
 
@@ -176,6 +203,10 @@ public class CategoryManager extends SQLiteOpenHelper {
         categoryDatabase.close();
     }
 
+    /** deletes the database
+     *
+     * @param context context of the application
+     */
     public void deleteDB(Context context) {
         context.deleteDatabase(DATABASE_CATEGORIES);
         categoryManager =null;

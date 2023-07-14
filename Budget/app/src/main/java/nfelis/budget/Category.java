@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Category {
+    /** all categories of the database or only the ones in the budget if the percentage view is set */
     public static HashMap<Integer,Category> categoryMap = new HashMap<>();
-    // all categories of the database or only the ones in the budget if the percentage view is set
     public static HashMap<Integer,Category> categoryNonMap = new HashMap<>();
     // this map should be non empty only if the percentage view is on
     public final static String CATEGORY_EDIT_EXTRA = "categoryEdit";

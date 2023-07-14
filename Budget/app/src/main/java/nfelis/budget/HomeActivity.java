@@ -61,24 +61,23 @@ public class HomeActivity extends MainActivity {
         isFirstLaunch = preferences.getBoolean(PREF_FIRST_LAUNCH, true);
         visualCash = preferences.getBoolean(CASHVISIBLE,false);
 
-        if (isFirstLaunch) {
-            // Show the storage location dialog
-            showStorageLocationDialog();
+        initWidgets();
+        setVisibility();
+        setDaysLimits();
 
+        if (isFirstLaunch) {
             // Once the dialog is shown, update the flag to indicate it has been shown
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(PREF_FIRST_LAUNCH, false);
             editor.apply();
+            // Show the storage location dialog
+            showStorageLocationDialog();
         } else {
-            initWidgets();
-            setVisibility();
-            setDaysLimits();
             loadFromDBToMemory();
             getMaxDepense();
+            spendSubscriptions();
         }
 
-
-        spendSubscriptions();
 
     }
 
@@ -90,6 +89,9 @@ public class HomeActivity extends MainActivity {
 
         sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.populateExpenseListArray(startDate,endDate);
+
+        SubscriptionManager subscriptionManager = SubscriptionManager.instanceOfDatabase(this);
+        subscriptionManager.populateSubscriptionListArray();
     }
 
     private void getMaxDepense() {
@@ -234,6 +236,9 @@ public class HomeActivity extends MainActivity {
                             throw new RuntimeException(e);
                         }
                         // Perform any necessary actions
+                        loadFromDBToMemory();
+                        getMaxDepense();
+                        spendSubscriptions();
                     }
                 })
                 .setNegativeButton("Custom", new DialogInterface.OnClickListener() {
@@ -259,15 +264,12 @@ public class HomeActivity extends MainActivity {
 
             // Handle the selected location URI (treeUri) here
             try {
-                Utils.saveStorageLocation(this,"storage_location",treeUri,"");
+                Utils.saveStorageLocation(this, "storage_location", treeUri, "");
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }
 
         }
-        initWidgets();
-        setVisibility();
-        setDaysLimits();
         loadFromDBToMemory();
         getMaxDepense();
         onResume();

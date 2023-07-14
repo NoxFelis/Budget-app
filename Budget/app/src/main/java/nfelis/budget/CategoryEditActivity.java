@@ -51,6 +51,7 @@ public class CategoryEditActivity extends AppCompatActivity {
         setOnListeners();
     }
 
+    /** Initializes the widgets of the view */
     private void initWidgets() {
         nameText = findViewById(R.id.nameText);
         nameEdit = findViewById(R.id.nameEdit);
@@ -64,6 +65,7 @@ public class CategoryEditActivity extends AppCompatActivity {
         deleteButton = findViewById(R.id.deleteButton);
     }
 
+    /** Sets the visibility of the the scroll or entry depending of the percentage mode or not*/
     private void setVisibility(Boolean inBudget) {
         if (percent && inBudget) {
             amountButton.setVisibility(View.VISIBLE);
@@ -74,6 +76,7 @@ public class CategoryEditActivity extends AppCompatActivity {
         }
     }
 
+    /** Sets the listeners of the elements in the view*/
     private void setOnListeners() {
         switchInBudget.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -102,6 +105,8 @@ public class CategoryEditActivity extends AppCompatActivity {
         });
     }
 
+    /** Checks if we are editing or creating a new category. If it is editing,
+     * we need to load the information */
     private void checkForEditCategory() {
         Intent previousIntent = getIntent();
 
@@ -135,6 +140,10 @@ public class CategoryEditActivity extends AppCompatActivity {
         }
     }
 
+    /** Adds the category to the database (if new), updates it if it is not new, and puts in the
+     * correct category map
+     * @param view
+     */
     public void saveCategory(View view) {
         // open database and first elements
         CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this);
@@ -229,6 +238,7 @@ public class CategoryEditActivity extends AppCompatActivity {
     }
 
 
+    /** Deletes the category. The button is only visible if we edit an existing category */
     public void deleteCategory(View view) {
         CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this);
         categoryManager.deleteCategoryInDB(selectedCategory);
@@ -238,6 +248,7 @@ public class CategoryEditActivity extends AppCompatActivity {
         finish();
     }
 
+    /** Cancel what is done, we check if we really want to leave without saving*/
     public void cancel(View view) {
         String title = String.valueOf(nameEdit.getText()).trim();
         String value = String.valueOf(amountEdit.getText());
@@ -275,6 +286,7 @@ public class CategoryEditActivity extends AppCompatActivity {
 
     }
 
+    /** if the percentage button is visible we open the picker with it, limiting to the percentage left*/
     public void openPercentagePicker(View view) {
         Context context = getApplicationContext();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

@@ -40,8 +40,6 @@ public class CategoryActivity extends MainActivity {
         percent = preferences.getBoolean(PERCENTAGE, false);
         if (percent) {
             String value = context.getString(R.string.total);
-
-            // TODO
             maxDepense = preferences.getInt(value,Integer.parseInt(context.getString(R.string.default_total)));
         }
 
@@ -50,12 +48,14 @@ public class CategoryActivity extends MainActivity {
 
     }
 
+    /** Initializes the widgets of the view */
     private void initWidgets() {
         categoryListView = findViewById(R.id.categoryListView);
         categoryNonListView = findViewById(R.id.categoryNonListView);
         total = findViewById(R.id.total);
     }
 
+    /** Sets the visibility of the category list views, depending on if it is in percentage mode or not*/
     private void setVisibility() {
         if (percent) {
             categoryNonListView.setVisibility(View.VISIBLE);
@@ -68,11 +68,13 @@ public class CategoryActivity extends MainActivity {
         }
     }
 
+    /** Loads the database of the categories in the categoryMaps*/
     private void loadFromDBToMemory() {
         CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this);
         categoryManager.populateCategorySet(percent);
     }
 
+    /** Sets the category adapters to view the categories*/
     private void setCategoryAdapter() {
         adapter = new CategoryAdapter(getApplicationContext(), new ArrayList<Category>(Category.categoryMap.values()));
         categoryListView.setAdapter(adapter);
@@ -83,6 +85,7 @@ public class CategoryActivity extends MainActivity {
 
     }
 
+    /** Sets the listeners of the elements in the view*/
     private void setOnClickListener() {
         categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -107,6 +110,7 @@ public class CategoryActivity extends MainActivity {
     }
 
 
+    /** Sends to a new view to create a new category*/
     public void newCategory(View view){
         Intent newCategoryIntent = new Intent(getApplicationContext(), CategoryEditActivity.class);
         startActivity(newCategoryIntent);
