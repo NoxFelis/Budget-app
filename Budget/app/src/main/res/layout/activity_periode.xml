@@ -16,14 +16,14 @@
         android:orientation="horizontal"
         android:gravity="center">
         <Button
-            android:id="@+id/previous_periode"
+            android:id="@+id/periodeButton"
             android:layout_width="0dp"
             android:layout_weight="2"
             android:minWidth="110dp"
             android:layout_height="match_parent"
             android:backgroundTint="@color/delftBlue_2"
-            android:text="Previous"
-            android:onClick="previousPeriod"
+            android:text="Définir période"
+            android:onClick="definePeriod"
             android:textColor="@color/platinum"/>
         <TextView
             android:id="@+id/dateText"
@@ -34,7 +34,7 @@
             android:layout_weight="3"
             android:textColor="@color/platinum"/>
 
-        <Button
+        <!--<Button
             android:id="@+id/next_periode"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -43,7 +43,7 @@
             android:backgroundTint="@color/delftBlue_2"
             android:onClick="nextPeriod"
             android:text="Next"
-            android:textColor="@color/platinum" />
+            android:textColor="@color/platinum" />-->
     </LinearLayout>
 
     <LinearLayout

@@ -44,4 +44,5 @@
     <string name="default_total">200</string>
     <string name="percentage">percentage</string>
     <string name="default_storage">/storage/emulated/0/Documents/nfelis.budget/</string>
+    <string name="ok">ok</string>
 </resources>

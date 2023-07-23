@@ -150,15 +150,7 @@ public class Utils {
         }
     }
 
-    public static List<String> setPeriodLimits(int monthEnd,int yearEnd) {
-
-        int monthStart = monthEnd -5;
-        int yearStart = yearEnd;
-        if (monthStart <= 0) {
-            monthStart = 12 - monthStart;
-            yearStart--;
-        }
-
+    public static List<String> setPeriodLimits(int monthStart, int yearStart,int monthEnd,int yearEnd) {
         int dayStart = 1;
         int dayEnd = 31;
         switch (monthEnd) {
@@ -173,6 +165,12 @@ public class Utils {
                 break;
         }
         return Arrays.asList(makeDateString(dayStart, monthStart, yearStart), makeDateString(dayEnd, monthEnd, yearEnd));
+    }
+
+    public static int countMonths(int startMonth, int startYear, int endMonth,int endYear) {
+        int years =(endYear-startYear)*12;
+        int months = endMonth - startMonth;
+        return years + months + 1;
     }
     public static String showPeriod(String startDate, String endDate) {
         String[] start = startDate.split("-");
