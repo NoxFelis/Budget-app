@@ -28,10 +28,10 @@ import java.net.URISyntaxException;
 
 public class SettingsFragment extends PreferenceFragment {
     private static final int REQUEST_CODE_FILE_CHOOSER = 1001;
-    private static String PREFS_NAME, PERCENTAGE,CASHVISIBLE;
+    private static String PREFS_NAME, PERCENTAGE,CASHVISIBLE,SOLDE,SOLDEINITIAL,CENTSVISIBLE;
     Preference folderPicker;
-    SwitchPreference percentage,cashVisible;
-    EditTextPreference total;
+    SwitchPreference percentage,cashVisible,soldeCalcul,cents;
+    EditTextPreference total,soldeInitial;
     Context context;
     private static SharedPreferences preferences;
 
@@ -49,11 +49,17 @@ public class SettingsFragment extends PreferenceFragment {
         PREFS_NAME = context.getString(R.string.prefName);
         PERCENTAGE = context.getString(R.string.percentage);
         CASHVISIBLE = context.getString(R.string.cashVisible);
+        SOLDE = context.getString(R.string.solde);
+        SOLDEINITIAL = context.getString(R.string.soldeInitial);
+        CENTSVISIBLE = context.getString(R.string.cents);
 
         folderPicker = (Preference) findPreference("folderPicker");
         percentage = (SwitchPreference) findPreference(PERCENTAGE);
         total = (EditTextPreference) findPreference(context.getString(R.string.total));
         cashVisible = (SwitchPreference) findPreference(CASHVISIBLE);
+        soldeCalcul = (SwitchPreference) findPreference(SOLDE);
+        soldeInitial = (EditTextPreference) findPreference(SOLDEINITIAL);
+        cents = (SwitchPreference) findPreference(CENTSVISIBLE);
 
         preferences = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
     }
@@ -82,6 +88,7 @@ public class SettingsFragment extends PreferenceFragment {
                     alertDialog.setButton2("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             alertDialog.dismiss();
+                            percentage.setChecked(false);
                         }
                     });
                     alertDialog.setButton("Continuer", new DialogInterface.OnClickListener() {
@@ -120,6 +127,42 @@ public class SettingsFragment extends PreferenceFragment {
                 boolean checked = (boolean) newValue;
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean(CASHVISIBLE,checked);
+                editor.apply();
+                return true;
+            }
+        });
+
+        soldeCalcul.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+                boolean checked = (boolean) newValue;
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(SOLDE,checked);
+                editor.apply();
+
+                soldeInitial.setEnabled(checked);
+                return true;
+            }
+        });
+
+        soldeInitial.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+                int value = Math.round(Float.parseFloat(((String) newValue))*100);
+                String CURRENTSOLDE = context.getString(R.string.currentSolde);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt(CURRENTSOLDE,value);
+                editor.apply();
+                return true;
+            }
+        });
+
+        cents.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+                boolean checked = (boolean) newValue;
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(CENTSVISIBLE,checked);
                 editor.apply();
                 return true;
             }

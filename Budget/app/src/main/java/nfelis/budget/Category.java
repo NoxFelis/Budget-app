@@ -17,6 +17,7 @@ public class Category {
     private String color;       // couleur de la catégorie en HEX
     private boolean visible;    // si la catégorie est dans les graphes
     private boolean inBudget;   // si la catégorie est a compter dans le budget
+   // private Date dateBegin,dateEnd;     // si la catégorie est pour un budget sur une période
 
     /** Constructor of the category */
     public Category(int id, String name, int amount, String color, boolean visible, boolean inBudget) {

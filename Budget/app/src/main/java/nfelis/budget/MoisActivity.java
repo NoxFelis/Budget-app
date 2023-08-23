@@ -1,5 +1,7 @@
 package nfelis.budget;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -35,6 +37,7 @@ public class MoisActivity extends MainActivity {
     private LinkedHashMap<String,PieEntry> pieEntryMap;
     private int thisMonth, thisYear, month,year;
     private Button nextButton;
+    private boolean cents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,12 @@ public class MoisActivity extends MainActivity {
         activityMoisBinding = ActivityMoisBinding.inflate(getLayoutInflater());
         setContentView(activityMoisBinding.getRoot());
         allocateActivityTitle("Mois");
+
+        Context context = getApplicationContext();
+        String PREFS_NAME = context.getString(R.string.prefName);
+        String CENTSVISIBLE = context.getString(R.string.cents);
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        cents = preferences.getBoolean(CENTSVISIBLE,true);
 
         initWidgets();
         getTodaysDate();
@@ -142,7 +151,7 @@ public class MoisActivity extends MainActivity {
     private void progressBarShow() {
         int reste = (maxDepense - Expense.getTotal());
         float total = (float) reste/100;
-        String value = total + "€";
+        String value = (cents) ? String.format("%.02f", total) + "€" : Math.round(total) + "€";
         valueRest.setText(value);
 
         resteBudget.setProgress(Math.abs(reste));

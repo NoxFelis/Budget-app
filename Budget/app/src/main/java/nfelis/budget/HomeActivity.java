@@ -34,8 +34,8 @@ import nfelis.budget.databinding.ActivityHomeBinding;
 
 public class HomeActivity extends MainActivity {
     private static final int REQUEST_CODE_FILE_CHOOSER = 1001;
-    private static boolean isFirstLaunch,visualCash;
-    private static String PREFS_NAME,SUBSCRIPTION,CASHVISIBLE;
+    private static boolean isFirstLaunch,visualCash,solde,cents;
+    private static String PREFS_NAME,SUBSCRIPTION,CASHVISIBLE, NEWSOLDE,SOLDE,CENTSVISIBLE;
     private static final String PREF_FIRST_LAUNCH = "FirstLaunch";
     private PieChart pieChart;
     private LinkedHashMap<String,Integer> colors;
@@ -43,10 +43,12 @@ public class HomeActivity extends MainActivity {
     ActivityHomeBinding activityHomeBinding;
     private String startDate,endDate;
     private TextView valueRest, textArgent,textCash,cashValue;
-    private int maxDepense,subscriptionMonths,month;
+    private int maxDepense,subscriptionMonths,month,soldeIn;
     private ProgressBar resteBudget;
     private ListView budgetListView;
     private SQLiteManager sqLiteManager;
+
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,16 +56,25 @@ public class HomeActivity extends MainActivity {
         activityHomeBinding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(activityHomeBinding.getRoot());
         allocateActivityTitle("Home");
+        Context context = getApplicationContext();
 
-        PREFS_NAME = getApplicationContext().getString(R.string.prefName);
-        CASHVISIBLE = getApplicationContext().getString(R.string.cashVisible);
-        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        isFirstLaunch = preferences.getBoolean(PREF_FIRST_LAUNCH, true);
-        visualCash = preferences.getBoolean(CASHVISIBLE,false);
+        PREFS_NAME = context.getString(R.string.prefName);
+        CASHVISIBLE = context.getString(R.string.cashVisible);
+        NEWSOLDE = context.getString(R.string.newSolde);
+        SOLDE = context.getString(R.string.solde);
+        CENTSVISIBLE = context.getString(R.string.cents);
+
+        preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        isFirstLaunch = preferences.getBoolean(PREF_FIRST_LAUNCH, true);    // first launch
+        visualCash = preferences.getBoolean(CASHVISIBLE,false);             // do we see the cash
+        soldeIn = preferences.getInt(NEWSOLDE,1);
+        solde = preferences.getBoolean(SOLDE,false);
+        cents = preferences.getBoolean(CENTSVISIBLE,true);
 
         initWidgets();
         setVisibility();
         setDaysLimits();
+        getSolde();
 
         if (isFirstLaunch) {
             // Once the dialog is shown, update the flag to indicate it has been shown
@@ -77,8 +88,6 @@ public class HomeActivity extends MainActivity {
             getMaxDepense();
             spendSubscriptions();
         }
-
-
     }
 
 
@@ -107,6 +116,25 @@ public class HomeActivity extends MainActivity {
         List<String> days = Utils.setDateLimits(month,year);
         startDate = days.get(0);
         endDate = days.get(1);
+    }
+
+    private void getSolde() {
+        // if it's a new month, we need the income
+        if (month > soldeIn) {
+            Context context = getApplicationContext();
+            String CURRENTSOLDE = context.getString(R.string.currentSolde);
+            String TOTAL = context.getString(R.string.total);
+            int income = preferences.getInt(TOTAL,0);
+
+            // if we are in a 'history' mode, we need to get the last value
+            int currentSolde = (solde) ? preferences.getInt(CURRENTSOLDE,0) : 0;
+
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(CURRENTSOLDE,currentSolde + income);
+            editor.putInt(NEWSOLDE, month);
+            editor.apply();
+
+        }
     }
 
     private void initWidgets() {
@@ -140,7 +168,6 @@ public class HomeActivity extends MainActivity {
     }
 
     public void newExpense(View view)
-
     {
         Intent newExpenseIntent = new Intent(this, ExpenseEditActivity.class);
         startActivity(newExpenseIntent);
@@ -192,7 +219,7 @@ public class HomeActivity extends MainActivity {
     private void progressBarShow() {
         int reste = (maxDepense - Expense.getTotal());
         float total = (float) reste/100;
-        String value = total + "€";
+        String value = (cents) ? String.format("%.02f", total) + "€" : Math.round(total) + "€";
         valueRest.setText(value);
 
         resteBudget.setProgress(Math.abs(reste));

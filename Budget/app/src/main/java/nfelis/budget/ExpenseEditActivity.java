@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.prefs.Preferences;
 
 import nfelis.budget.R;
 
@@ -45,6 +47,7 @@ public class ExpenseEditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_edit);
+
 
         initWidgets();
         setListeners();
@@ -128,7 +131,7 @@ public class ExpenseEditActivity extends AppCompatActivity {
 
         if (selectedExpense != null) {
             titreEditText.setText(selectedExpense.getTitle());
-            editTextNumber.setText(Utils.getStringFromAmount(selectedExpense.getAmount()));
+            editTextNumber.setText(Utils.getStringFromAmount(selectedExpense.getAmount(),true));
             dateButton.setText(Utils.getStringFromDate(selectedExpense.getDate(),dateFormat));
             categorySpinner.setSelection(categoryAdapter.getPosition(Category.getCategoryForID(selectedExpense.getCategory())));
             switchCash.setChecked(selectedExpense.isCash());

@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import java.io.File;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +35,21 @@ import android.provider.MediaStore;
 import java.net.URISyntaxException;
 
 public class Utils {
+    public String MYPREFS = "myPrefs";              // name of preferences to get
+    public String CASHVISIBLE = "cashVisible";      // if the cash is visible
+    public String CASHVALUE = "cashValue";          // the cash available
+    public String INCOME = "income";                // the income value (new money every month)
+    public String PERCENTAGE = "percentage";        // if we are in a percentage mode
+    public String STORAGE = "storage_location";     // location of the storage of db
+    public String SOLDE = "solde";                  // if we compute with last month's solde
+
+
+    public String default_storage = "/storage/emulated/0/Documents/nfelis.budget/"; // default path of storage
+    public int default_income = 200;                // default value of income
+    public String expense = "Expense.db";
+    public String subscription = "Subscription.db";
+    public String category = "Category.db";
+
     public static List<String> setDateLimits(int month, int year) {
         int dayStart = 1;
         int dayEnd = 31;
@@ -68,10 +84,8 @@ public class Utils {
         return year + "-" + mon + "-" + da;
     }
 
-    public static String getStringFromAmount(int amount) {
-        int euro = amount/100;
-        int cent = amount - euro*100;
-        return Integer.toString(euro) + "." + Integer.toString(cent);
+    public static String getStringFromAmount(int amount,boolean centVisible) {
+        return (centVisible) ? Float.toString((float) amount / 100) : Integer.toString(amount/100);
     }
 
     public static String getStringFromDate(Date date, DateFormat dateFormat)
@@ -320,9 +334,9 @@ public class Utils {
     public static CharSequence getCash(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.prefName),MODE_PRIVATE);
         int cash = preferences.getInt(context.getString(R.string.cash),0);
+        boolean centVisible = preferences.getBoolean(context.getString(R.string.cents),true);
         int cash_euro = Math.round(((float) cash)/100);
-        int cash_cent = cash - cash_euro*100;
-        return cash_euro + "." + cash_cent + "€";
+        return (centVisible) ? cash_euro + "." + (cash - cash_euro*100) + "€" : cash_euro + "€";
     }
 
     public static void spendCash(Context context,Expense selectedExpense, int previousValue) {

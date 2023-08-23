@@ -21,6 +21,10 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import nfelis.budget.R;
 
 public class CategoryEditActivity extends AppCompatActivity {
@@ -293,21 +297,33 @@ public class CategoryEditActivity extends AppCompatActivity {
         View dialogView = getLayoutInflater().inflate(R.layout.dialogue_percentage_picker, null);
         NumberPicker percentagePicker = dialogView.findViewById(R.id.percentagePicker);
         percentagePicker.setMinValue(0);
+        int maxVal;
         if (selectedCategory == null) {
-            percentagePicker.setMaxValue(Utils.getResteDepense(context,-1));
+            maxVal = Utils.getResteDepense(context,-1);
+            percentagePicker.setMaxValue(maxVal/5);
             percentagePicker.setValue(Utils.getPercentage(context,0));
         } else {
-            percentagePicker.setMaxValue(Utils.getResteDepense(context,selectedCategory.getId()));
-            percentagePicker.setValue(Utils.getPercentage(context,Integer.parseInt(String.valueOf(amountButton.getText()))));
+            maxVal = Utils.getResteDepense(context,selectedCategory.getId());
+            percentagePicker.setMaxValue(maxVal/5);
+            //percentagePicker.setValue(Utils.getPercentage(context,Integer.parseInt(String.valueOf(amountButton.getText()))));
+            percentagePicker.setValue(Integer.parseInt(String.valueOf(amountButton.getText()))/5);
         }
         percentagePicker.setWrapSelectorWheel(false); // To block scrolling beyond min/max values
+
+        List<String> minuteValues = new ArrayList<String>();
+        for (int i=0; i<=maxVal; i+=5) {
+            String number = Integer.toString(i);
+            minuteValues.add(number);
+        }
+        String[] values = minuteValues.toArray(new String[0]);
+        percentagePicker.setDisplayedValues(values);
 
         builder.setTitle("Select Percentage")
                 .setView(dialogView)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        int selectedPercentage = percentagePicker.getValue();
+                        int selectedPercentage = percentagePicker.getValue()*5;
                         amountButton.setText(String.valueOf(selectedPercentage));
                     }
                 })

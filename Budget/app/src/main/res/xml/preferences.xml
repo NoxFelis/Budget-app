@@ -12,17 +12,35 @@
         <SwitchPreference
             android:title="Percentage Budget"
             android:key="@string/percentage"
-            android:defaultValue="false"/>
+            android:defaultValue="false"
+            android:summary="Calculer les valeurs de budget par pourcentage d'un budget donné"/>
         <EditTextPreference
             android:title="Budget Total"
             android:key="@string/total"
             android:defaultValue="200"
             android:enabled="false"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:summary="Valeur du budget aloué"/>
         <SwitchPreference
             android:title="Montrer le cash"
             android:key="@string/cashVisible"
-            android:defaultValue="false"/>
+            android:defaultValue="false"
+            android:summary="Afficher le cash disponible"/>
+        <SwitchPreference
+            android:title="Calculer le solde"
+            android:key="@string/solde"
+            android:summary="Calculer le solde restant sur le compte" />
+        <EditTextPreference
+            android:title="Solde de départ"
+            android:key="@string/soldeInitial"
+            android:summary="Valeur du solde dans le mois actuel, il n'y aura pas d'entrée de budget ce mois-ci"
+            android:inputType="numberDecimal"
+            android:enabled="false"
+            android:defaultValue="0.0"/>
+        <SwitchPreference
+            android:title="Voir les centimes"
+            android:key="@string/cents"
+            android:defaultValue="true"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

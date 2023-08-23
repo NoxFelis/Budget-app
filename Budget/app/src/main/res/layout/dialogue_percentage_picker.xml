@@ -9,5 +9,6 @@
         android:id="@+id/percentagePicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:value="0" />
+        android:value="0"
+        android:min="0"/>
 </LinearLayout>

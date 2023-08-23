@@ -77,7 +77,7 @@ public class SubscriptionEditActivity extends AppCompatActivity {
 
         if (selectedSubscription != null) {
             titreEditText.setText(selectedSubscription.getTitle());
-            editTextNumber.setText(Utils.getStringFromAmount(selectedSubscription.getAmount()));
+            editTextNumber.setText(Utils.getStringFromAmount(selectedSubscription.getAmount(),true));
             categorySpinner.setSelection(categoryAdapter.getPosition(Category.getCategoryForID(selectedSubscription.getCategory())));
             switchActivated.setChecked(selectedSubscription.isActivated());
 

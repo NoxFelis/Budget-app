@@ -32,17 +32,25 @@
 
 
     <string name="subscriptions">subscriptions</string>
-    <string name="textCash">Avec en cash :</string>
+
     <string name="cashValue">0.0€</string>
     <string name="cashVisible">cashVisible</string>
 
 
-    <!-- strings for preferences -->
     <string name="prefName">MyPrefs</string>
-    <string name="cash">cash</string>
     <string name="total">total</string>
     <string name="default_total">200</string>
     <string name="percentage">percentage</string>
     <string name="default_storage">/storage/emulated/0/Documents/nfelis.budget/</string>
+    <string name="newSolde">newSolde</string>
+    <string name="currentSolde">currentSolde</string>
+    <string name="solde">solde</string>
+
+    <!-- strings for preferences -->
+    <string name="textCash">Avec en cash :</string>
+    <string name="cash">cash</string>
     <string name="ok">ok</string>
+    <string name="soldeInitial">soldeInitial</string>
+    <string name="cents">cents</string>
+
 </resources>

@@ -1,6 +1,7 @@
 package nfelis.budget;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import nfelis.budget.R;
 
@@ -17,6 +19,7 @@ public class BudgetAdapter extends ArrayAdapter<Category> {
     private List<Category> categories;
     private List<Integer> progress;
     private int periode;
+    private boolean cents;
 
     /** constructor of the BudgetAdapter
      * @param context       context of the app
@@ -30,6 +33,11 @@ public class BudgetAdapter extends ArrayAdapter<Category> {
         this.categories = categories;
         this.progress = progress;
         this.periode = periode;
+
+        String CENTS = context.getString(R.string.cents);
+        String PREFS_NAME = context.getString(R.string.prefName);
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        cents = preferences.getBoolean(CENTS,true);
     }
 
     @Override
@@ -50,7 +58,8 @@ public class BudgetAdapter extends ArrayAdapter<Category> {
 
         // set the progress of the category (how much money has been spent in the category) in the given color
         TextView cellProgress = convertView.findViewById(R.id.cellProgress);
-        String rest = Utils.getStringFromAmount(progress.get(position)) + "/" + category.getAmount()*periode + ".0";
+        String rest = Utils.getStringFromAmount(progress.get(position),cents) + "/" + category.getAmount()*periode;
+        rest = (cents) ? rest + ".00" : rest;
         cellProgress.setText(rest);
         cellProgress.setTextColor(Color.parseColor(category.getColor()));
 

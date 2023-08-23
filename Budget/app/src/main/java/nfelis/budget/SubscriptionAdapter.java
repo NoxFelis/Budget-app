@@ -34,7 +34,7 @@ public class SubscriptionAdapter extends ArrayAdapter<Subscription> {
 
         String name = subscription.getTitle();
         title.setText(name);
-        amount.setText(Utils.getStringFromAmount(subscription.getAmount())+"€");
+        amount.setText(Utils.getStringFromAmount(subscription.getAmount(),true)+"€");
         cat.setText(Category.getCategoryForID(subscription.getCategory()).getName());
         if (!subscription.isActivated()) {
             title.setTextColor(gray);

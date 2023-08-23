@@ -2,7 +2,9 @@ package nfelis.budget;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -42,8 +44,8 @@ public class PeriodeActivity extends MainActivity {
     private LinkedHashMap<String, PieEntry> pieEntryMap;
     private Button nextButton, periodeButton,dateButton,buttonStart,buttonEnd;
     private DatePickerDialog datePickerDialog;
-    private int startMonth,startYear,endMonth,endYear,periode;
-    private boolean START;
+    private int startMonth,startYear,endMonth,endYear,periode,thisYear,thisMonth;
+    private boolean START,cents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +54,31 @@ public class PeriodeActivity extends MainActivity {
         setContentView(activityPeriodeBinding.getRoot());
         allocateActivityTitle("Periode");
 
+        Context context = getApplicationContext();
+        String PREFS_NAME = context.getString(R.string.prefName);
+        String CENTSVISIBLE = context.getString(R.string.cents);
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        cents = preferences.getBoolean(CENTSVISIBLE,true);
+
         initWidgets();
-        /*getTodaysDate();
-        List<String> days = Utils.setPeriodLimits(month, year);
+        getTodaysDate();
+        /*List<String> days = Utils.setPeriodLimits(month, year);
         startDate = days.get(0);
         endDate = days.get(1);
         loadFromDBToMemory();
         getMaxDepense();*/
+
+        List<String> days = Utils.setPeriodLimits(thisMonth, thisYear,thisMonth, thisYear);
+        startDate = days.get(0);
+        endDate = days.get(1);
+        dateText.setText(Utils.showPeriod(startDate, endDate));
+        periode = 1;
+        loadFromDBToMemory();
+        getMaxDepense();
+        setValues();
+        setUpChart();
+        progressBarShow();
+        setBudgetAdapter();
     }
 
     private void initWidgets() {
@@ -67,7 +87,6 @@ public class PeriodeActivity extends MainActivity {
         valueRest = findViewById(R.id.valueRest);
         budgetListView = findViewById(R.id.budgetListView);
         resteBudget = findViewById(R.id.resteBudget);
-        //nextButton = findViewById(R.id.next_periode);
         periodeButton = findViewById(R.id.periodeButton);
 
         pieChart = findViewById(R.id.chart);
@@ -80,14 +99,11 @@ public class PeriodeActivity extends MainActivity {
         colors = new LinkedHashMap<>();
     }
 
-    /*private void getTodaysDate() {
+    private void getTodaysDate() {
         Calendar cal = Calendar.getInstance();
         thisYear = cal.get(Calendar.YEAR);
         thisMonth = cal.get(Calendar.MONTH) + 1;
-        month = thisMonth;
-        year = thisYear;
     }
-*/
     private void loadFromDBToMemory() {
         CategoryManager categoryManager = CategoryManager.instanceOfDatabase(this);
         categoryManager.populateCategorySet(false);
@@ -153,7 +169,7 @@ public class PeriodeActivity extends MainActivity {
     private void progressBarShow() {
         int reste = (maxDepense - Expense.getTotal());
         float total = (float) reste / 100;
-        String value = total + "€";
+        String value = (cents) ? String.format("%.02f", total) + "€" : Math.round(total) + "€";
         valueRest.setText(value);
 
         resteBudget.setProgress(Math.abs(reste));
@@ -228,14 +244,12 @@ public class PeriodeActivity extends MainActivity {
     }
 
     public void definePeriod(View view) {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Définissez une période");
 
         // set the custom layout
         final View customLayout = getLayoutInflater().inflate(R.layout.period_dialog, null);
         builder.setView(customLayout);
-        // create and show the alert dialog
         AlertDialog dialog = builder.create();
 
         Button buttonCancel = customLayout.findViewById(R.id.button1);
@@ -255,9 +269,16 @@ public class PeriodeActivity extends MainActivity {
             @Override
             public void onClick(View view) {
                 if (startYear*100 + startMonth > endYear*100 + endMonth) {
-                    // TODO ALERT DIALOG PAS POSSIBLE
+                    AlertDialog alertDialog = new AlertDialog.Builder(getApplicationContext()).create(); //Read Update
+                    alertDialog.setTitle("Dates incorrectes");
+                    alertDialog.setMessage("Vous ne pouvez pas avoir une date de fin précédente à la date de départ!");
+                    alertDialog.setButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
                 } else {
-                    //TODO Calcul de la periode à montrer puis affichage
                     List<String> days = Utils.setPeriodLimits(startMonth, startYear,endMonth, endYear);
                     startDate = days.get(0);
                     endDate = days.get(1);
@@ -316,13 +337,9 @@ public class PeriodeActivity extends MainActivity {
                 }
             }
         };
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
 
         int style = AlertDialog.THEME_HOLO_DARK;
-        datePickerDialog = new DatePickerDialog(this, style, dateSetListener,year,month,day);
+        datePickerDialog = new DatePickerDialog(this, style, dateSetListener,thisYear,thisMonth,1);
     }
 
 }
