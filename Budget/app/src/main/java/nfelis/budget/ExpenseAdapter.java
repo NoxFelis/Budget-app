@@ -20,7 +20,7 @@ import java.util.prefs.Preferences;
 import nfelis.budget.R;
 
 public class ExpenseAdapter extends ArrayAdapter<Expense> {
-    private int gray;
+    private int gray,mint;
     private boolean cents;
     @SuppressLint("SimpleDateFormat")
     private static final DateFormat dateFormat = new SimpleDateFormat("dd-MM");
@@ -28,6 +28,7 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
     {
         super(context, 0, expenses);
         gray = context.getResources().getColor(R.color.battleshipGray);
+        mint = context.getResources().getColor(R.color.mintGreen);
 
         String CENTS = context.getString(R.string.cents);
         String PREFS_NAME = context.getString(R.string.prefName);
@@ -56,6 +57,11 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
             amount.setTextColor(gray);
             cat.setTextColor(gray);
             date.setTextColor(gray);
+        } else if (expense.getAmount()< 0) {
+            title.setTextColor(mint);
+            amount.setTextColor(mint);
+            cat.setTextColor(mint);
+            date.setTextColor(mint);
         }
         return convertView;
     }
