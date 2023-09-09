@@ -40,6 +40,7 @@ public class ExpenseEditActivity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private Button dateButton;
     private int day, month, year;
+    private boolean passedEntry;
     @SuppressLint("SimpleDateFormat")
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -128,6 +129,7 @@ public class ExpenseEditActivity extends AppCompatActivity {
 
         int passedExpenseID = previousIntent.getIntExtra(Expense.EXPENSE_EDIT_EXTRA,-1);
         selectedExpense = Expense.getExpenseForID(passedExpenseID);
+        passedEntry = previousIntent.getBooleanExtra(Expense.ENTRY_EDIT_EXTRA,false);
 
         if (selectedExpense != null) {
             titreEditText.setText(selectedExpense.getTitle());
@@ -135,13 +137,25 @@ public class ExpenseEditActivity extends AppCompatActivity {
             dateButton.setText(Utils.getStringFromDate(selectedExpense.getDate(),dateFormat));
             categorySpinner.setSelection(categoryAdapter.getPosition(Category.getCategoryForID(selectedExpense.getCategory())));
             switchCash.setChecked(selectedExpense.isCash());
-            switchRetrait.setChecked(selectedExpense.isRetrait());
-            switchRembourse.setChecked(selectedExpense.isRembourse());
-            switchRembourseCash.setChecked(selectedExpense.isRembourseCash());
 
+            if (passedEntry) {
+                switchRembourse.setVisibility(View.GONE);
+                switchRembourseCash.setVisibility(View.GONE);
+                switchRetrait.setVisibility(View.GONE);
+            } else {
+                switchRetrait.setChecked(selectedExpense.isRetrait());
+                switchRembourse.setChecked(selectedExpense.isRembourse());
+                switchRembourseCash.setChecked(selectedExpense.isRembourseCash());
+            }
         } else {
             // idk
-            deleteButton.setVisibility(View.INVISIBLE);
+            deleteButton.setVisibility(View.GONE);
+
+            if (passedEntry) {
+                switchRembourse.setVisibility(View.GONE);
+                switchRembourseCash.setVisibility(View.GONE);
+                switchRetrait.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -199,6 +213,8 @@ public class ExpenseEditActivity extends AppCompatActivity {
             SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
             String value = String.valueOf(editTextNumber.getText());
             int amount = (value.length() == 0) ? 0 : Math.round(Float.parseFloat(value)*100) ;
+
+            amount = (passedEntry) ? -1*amount : amount;
 
             int category = ((Category) categorySpinner.getSelectedItem()).getId();
             boolean cash = switchCash.isChecked();

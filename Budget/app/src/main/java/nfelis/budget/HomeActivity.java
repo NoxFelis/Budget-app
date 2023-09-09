@@ -169,8 +169,32 @@ public class HomeActivity extends MainActivity {
 
     public void newExpense(View view)
     {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create(); //Read Update
+        alertDialog.setTitle("Nouvelle entrée");
+        alertDialog.setMessage("Est-ce une entrée ou sortie d'argent?");
         Intent newExpenseIntent = new Intent(this, ExpenseEditActivity.class);
-        startActivity(newExpenseIntent);
+        alertDialog.setButton3("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.setButton2("Entrée", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                newExpenseIntent.putExtra(Expense.ENTRY_EDIT_EXTRA,true);
+                startActivity(newExpenseIntent);
+                finish();
+            }
+        });
+        alertDialog.setButton("Sortie", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                newExpenseIntent.putExtra(Expense.ENTRY_EDIT_EXTRA,false);
+                startActivity(newExpenseIntent);
+                finish();
+            }
+        });
+        alertDialog.show();  //<-- See This!
     }
 
     private void setValues() {

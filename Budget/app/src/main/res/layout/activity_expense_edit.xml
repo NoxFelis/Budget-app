@@ -80,7 +80,7 @@
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:hint="Prix de la dépense"
-            android:inputType="number|numberSigned|numberDecimal"
+            android:inputType="number|numberDecimal"
             android:textColor="@color/platinum"
             android:textColorHint="@color/timberwolf"
             android:textSize="22sp" />

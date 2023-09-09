@@ -91,6 +91,7 @@ public class DetailActivity extends MainActivity {
                 if (!isMultipleMode) {
                     Intent editExpenseIntent = new Intent(getApplicationContext(), ExpenseEditActivity.class);
                     editExpenseIntent.putExtra(Expense.EXPENSE_EDIT_EXTRA, selectedExpense.getId());
+                    editExpenseIntent.putExtra(Expense.ENTRY_EDIT_EXTRA, selectedExpense.getAmount()<0);
                     startActivity(editExpenseIntent);
                 } else {
                     if (expenseListView.isItemChecked(position)) {

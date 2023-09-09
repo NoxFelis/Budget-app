@@ -85,7 +85,7 @@ public class Utils {
     }
 
     public static String getStringFromAmount(int amount,boolean centVisible) {
-        return (centVisible) ? Float.toString((float) amount / 100) : Integer.toString(amount/100);
+        return (centVisible) ? Float.toString((float) Math.abs(amount) / 100) : Integer.toString(Math.abs(amount)/100);
     }
 
     public static String getStringFromDate(Date date, DateFormat dateFormat)

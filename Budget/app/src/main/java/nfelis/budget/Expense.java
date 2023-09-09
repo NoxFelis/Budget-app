@@ -8,6 +8,7 @@ import java.util.List;
 public class Expense {
     public static LinkedHashMap<Integer,Expense> expenseMap = new LinkedHashMap<>();
     public static String EXPENSE_EDIT_EXTRA =  "expenseEdit";
+    public static String ENTRY_EDIT_EXTRA = "entry";
     private int id;             // id de reconnaissance de la dépense
     private String title;       // titre/descriptif de la dépense
     private int category;    // id de la catégorie de la dépense (santé, loisir, alimentaire, etc.)
