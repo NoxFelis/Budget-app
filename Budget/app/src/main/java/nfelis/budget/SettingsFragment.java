@@ -61,6 +61,8 @@ public class SettingsFragment extends PreferenceFragment {
         soldeInitial = (EditTextPreference) findPreference(SOLDEINITIAL);
         cents = (SwitchPreference) findPreference(CENTSVISIBLE);
 
+        soldeInitial.setEnabled(soldeCalcul.isChecked());
+
         preferences = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
     }
 

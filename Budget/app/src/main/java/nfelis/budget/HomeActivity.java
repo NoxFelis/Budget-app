@@ -183,7 +183,6 @@ public class HomeActivity extends MainActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 newExpenseIntent.putExtra(Expense.ENTRY_EDIT_EXTRA,true);
                 startActivity(newExpenseIntent);
-                finish();
             }
         });
         alertDialog.setButton("Sortie", new DialogInterface.OnClickListener() {
@@ -191,7 +190,6 @@ public class HomeActivity extends MainActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 newExpenseIntent.putExtra(Expense.ENTRY_EDIT_EXTRA,false);
                 startActivity(newExpenseIntent);
-                finish();
             }
         });
         alertDialog.show();  //<-- See This!

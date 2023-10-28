@@ -253,8 +253,8 @@ public class ExpenseEditActivity extends AppCompatActivity {
             }
             finish();
         }
-
     }
+
     public void deleteExpense(View view)
     {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create(); //Read Update

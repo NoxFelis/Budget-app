@@ -235,10 +235,8 @@ public class CategoryEditActivity extends AppCompatActivity {
                 }
                 categoryManager.updateCategoryInDB(selectedCategory);
             }
-
         }
         finish();
-
     }
 
 
